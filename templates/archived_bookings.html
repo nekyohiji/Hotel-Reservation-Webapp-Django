@@ -1,0 +1,230 @@
+{% extends 'nav_ad.html' %}
+{% load static %}
+{% block title %}
+    Reservation History - JSX Hotel
+{% endblock %}
+{% block content %}
+
+<body>
+  <link rel="stylesheet" href="{% static 'css/archived_bookings.css' %}">
+
+  <main>
+    <article>
+      <h2 class="center-title">Archives Window</h2> 
+    </article>
+
+    <!-- Dropdown Menu for Selecting Archive -->
+    <label for="archiveSelect">Choose an archive:</label>
+    <select id="archiveSelect" onchange="showArchive(this.value)">
+      <option value="">Select an archive</option>
+      <option value="ArchiveAccounts">Archive Accounts</option>
+      <option value="ArchiveHomepageImages">Archived Homepage Images</option>
+      <option value="ArchiveHrAccount">Archive HR Accounts</option>
+      <option value="ArchiveReservation">Archive Reservations</option>
+      <option value="ArchiveRoomPromotions">Archive Room Promotions</option>
+      <option value="ArchiveBlocklisted">Blocklisted People</option>
+    </select>
+
+    <!-- Archive Content Sections -->
+
+    <!-- Archive Accounts Table -->
+    <section id="ArchiveAccounts" class="tabcontent">
+      <h2 class="center-title">Archive Accounts</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>First Name</th>
+            <th>Middle Name</th>
+            <th>Last Name</th>
+            <th>Address</th>
+            <th>Birthday</th>
+            <th>Email</th>
+            <th>Username</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for account in archive_accounts %}
+          <tr>
+            <td>{{ account.firstname }}</td>
+            <td>{{ account.middlename }}</td>
+            <td>{{ account.lastname }}</td>
+            <td>{{ account.address }}</td>
+            <td>{{ account.birthday }}</td>
+            <td>{{ account.email }}</td>
+            <td>{{ account.username }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </section>
+
+    <!-- Archived Homepage Images Table -->
+    <section id="ArchiveHomepageImages" class="tabcontent">
+      <h2 class="center-title">Archived Homepage Images</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Title</th>
+            <th>Description</th>
+            <th>Archived At</th>
+            <th>Used Homepage Images</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for image in archive_homepage_images %}
+          <tr>
+            <td>{{ image.title }}</td>
+            <td>{{ image.description }}</td>
+            <td>{{ image.archived_at }}</td>
+            <td data-label="Used Homepage Images">
+              <a href="{{ image.image.url }}" target="_blank">View Image</a>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </section>
+
+    <!-- Archive HR Accounts Table -->
+    <section id="ArchiveHrAccount" class="tabcontent">
+      <h2 class="center-title">Archive HR Accounts</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Username</th>
+            <th>Account Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for hr_account in archive_hraccount %}
+          <tr>
+            <td>{{ hr_account.username }}</td>
+            <td>{{ hr_account.hraccount_status }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </section>
+
+    <!-- Archive Reservations Table -->
+    <section id="ArchiveReservation" class="tabcontent">
+      <h2 class="center-title">Archive Reservations</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Email</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Reference ID</th>
+            <th>Check-in</th>
+            <th>Check-out</th>
+            <th>Room Type</th>
+            <th>Receipt</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for reservation in archive_reservation %}
+          <tr>
+            <td>{{ reservation.email }}</td>
+            <td>{{ reservation.firstname }}</td>
+            <td>{{ reservation.lastname }}</td>
+            <td>{{ reservation.reference_id }}</td>
+            <td>{{ reservation.check_in }}</td>
+            <td>{{ reservation.check_out }}</td>
+            <td>{{ reservation.room_type }}</td>
+            <td data-label="Receipt">
+              {% if reservation.receipt %}
+                  <a href="{{ reservation.receipt.url }}" target="_blank">View Image</a>
+              {% else %}
+                  No Receipt
+              {% endif %}
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </section>
+
+    <!-- Archive Room Promotions Table -->
+    <section id="ArchiveRoomPromotions" class="tabcontent">
+      <h2 class="center-title">Archive Room Promotions</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Room Name</th>
+            <th>Description</th>
+            <th>Price</th>
+            <th>Is Active</th>
+            <th>Room Image</th>
+            
+          </tr>
+        </thead>
+        <tbody>
+          {% for promotion in archive_room_promotions %}
+          <tr>
+            <td>{{ promotion.room_name }}</td>
+            <td>{{ promotion.description }}</td>
+            <td>{{ promotion.price }}</td>
+            <td>{{ promotion.is_active }}</td>
+            <td data-label="Room Image">
+              <a href="{{ promotion.image.url }}" target="_blank">View Image</a>
+            
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </section>
+
+    <!-- Blocklisted People Table -->
+    <section id="ArchiveBlocklisted" class="tabcontent">
+      <h2 class="center-title">Blocklisted People</h2>
+      <table>
+          <thead>
+              <tr>
+                  <th>First Name</th>
+                  <th>Middle Name</th>
+                  <th>Last Name</th>
+                  <th>Email</th>
+              </tr>
+          </thead>
+          <tbody>
+              {% for person in blocklist %}
+              <tr>
+                  <td>{{ person.firstname }}</td>
+                  <td>{{ person.middlename }}</td>
+                  <td>{{ person.lastname }}</td>
+                  <td>{{ person.email }}</td>
+              </tr>
+              {% endfor %}
+          </tbody>
+      </table>
+  </section>
+
+  </main>
+
+  <!-- JavaScript for Tab Functionality -->
+  <script>
+    // Hide all archive sections by default on page load
+    document.addEventListener("DOMContentLoaded", function() {
+      let tabcontent = document.getElementsByClassName("tabcontent");
+      for (let i = 0; i < tabcontent.length; i++) {
+        tabcontent[i].style.display = "none";
+      }
+    });
+  
+    // Function to show the selected archive section
+    function showArchive(archiveName) {
+      // Hide all archive sections
+      let tabcontent = document.getElementsByClassName("tabcontent");
+      for (let i = 0; i < tabcontent.length; i++) {
+        tabcontent[i].style.display = "none";
+      }
+  
+      // Show the selected archive section if it's not an empty selection
+      if (archiveName) {
+        document.getElementById(archiveName).style.display = "block";
+      }
+    }
+  </script>
+
+</body>
+{% endblock %}

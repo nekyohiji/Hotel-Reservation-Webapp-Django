@@ -1,0 +1,160 @@
+{% extends 'nav_ad.html' %}
+{% load static %}
+{% block title %}
+    Cancellation Requests - JSX Hotel
+{% endblock %}
+{% block content %}
+
+<main>
+    <link rel="stylesheet" href="{% static 'css/cncl_req_ad.css' %}">
+
+    <div class="container">
+        <h2 class="center-title">Cancellation Requests</h2>
+        <div class="table-wrapper">
+            <table id="cncl_req_ad" class="responsive-table">
+                <thead>
+                    <tr>
+                        <th>Reference ID</th>
+                        <th>Guest Name</th>
+                        <th>Check-in</th>
+                        <th>Check-out</th>
+                        <th>Room Type</th>
+                        <th>Cancellation Date</th>
+                        <th>Cancellation Reason</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for reservation in cancellations %}
+                    <tr data-reservation-id="{{ reservation.reference_id }}">
+                        <td>{{ reservation.reference_id }}</td>
+                        <td>{{ reservation.firstname }} {{ reservation.lastname }}</td>
+                        <td>{{ reservation.check_in }}</td>
+                        <td>{{ reservation.check_out }}</td>
+                        <td>{{ reservation.room_type }}</td>
+                        <td>{{ reservation.cancel_date }}</td>
+                        <td>{{ reservation.cancelreason }}</td>
+                        <td class="request-status">{{ reservation.cancelstatus }}</td>
+                        <td>
+                            <button class="approve_btn">Approve</button>
+                            <button class="decline_btn">Decline</button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+        <div id="loadingOverlay" class="loading-overlay">
+            <div class="spinner"></div>
+        </div>        
+    </div>
+</main>
+
+<script>
+    function fetchCancellationRequests() {
+        fetch('/cncl_req_ad/', {
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            updateCancellationTable(data.cancellations);
+        })
+        .catch(error => console.error('Error fetching cancellation requests:', error));
+    }
+    
+    function updateCancellationTable(cancellations) {
+        const tableBody = document.querySelector('#cncl_req_ad tbody');
+        tableBody.innerHTML = '';  // Clear the table
+
+        cancellations.forEach(reservation => {
+            const newRow = document.createElement('tr');
+            newRow.setAttribute('data-reservation-id', reservation.reference_id);
+
+            newRow.innerHTML = `
+                <td>${reservation.reference_id}</td>
+                <td>${reservation.firstname} ${reservation.lastname}</td>
+                <td>${reservation.check_in}</td>
+                <td>${reservation.check_out}</td>
+                <td>${reservation.room_type}</td>
+                <td>${reservation.cancel_date}</td>
+                <td>${reservation.cancelreason}</td>
+                <td class="request-status">${reservation.cancelstatus}</td>
+                <td>
+                    <button class="approve_btn">Approve</button>
+                    <button class="decline_btn">Decline</button>
+                </td>
+            `;
+            tableBody.appendChild(newRow);
+        });
+    }
+
+    function updateCancellationStatus(button, action) {
+        const row = button.closest('tr');
+        const reservationId = row.dataset.reservationId;
+        const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+    
+        // Show the overlay
+        const loadingOverlay = document.getElementById('loadingOverlay');
+        loadingOverlay.style.display = 'block';
+    
+        fetch(`/update-cancellation-status/${reservationId}/`, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': csrfToken,
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ action: action })
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    window.location.reload();
+                    // Update the status in the row dynamically
+                    row.querySelector('.request-status').innerText = data.cancelstatus;
+    
+                    // Show success alert
+                    alert(`Cancellation request ${action}d successfully for reservation ID ${reservationId}.`);
+    
+                    // Optionally refresh the table
+                    fetchCancellationRequests();
+                } else {
+                    // Show error alert
+                    alert(`Error: ${data.message || 'An error occurred while processing the action.'}`);
+                }
+            })
+            .catch(error => {
+                console.error('Error updating cancellation status:', error);
+                alert('An unexpected error occurred. Please try again later.');
+            })
+            .finally(() => {
+                // Hide the overlay
+                loadingOverlay.style.display = 'none';
+            });
+    }
+    
+    document.addEventListener('DOMContentLoaded', function() {
+        const tableBody = document.querySelector('#cncl_req_ad tbody');
+
+        // Initial fetch and then refresh every 10 seconds
+        fetchCancellationRequests();
+        setInterval(fetchCancellationRequests, 10000);
+
+        tableBody.addEventListener('click', function(event) {
+            if (event.target.classList.contains('approve_btn')) {
+                updateCancellationStatus(event.target, 'approve');
+            }
+            if (event.target.classList.contains('decline_btn')) {
+                updateCancellationStatus(event.target, 'decline');
+            }
+        });
+    });
+
+    
+</script>
+
+
+{% endblock %}

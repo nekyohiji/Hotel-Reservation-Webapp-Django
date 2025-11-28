@@ -1,0 +1,199 @@
+{% extends 'nav_hr.html' %}
+{% load static %}
+{% block title %}
+    Reservations - JSX Hotel
+{% endblock %}
+{% block content %}
+<div id="loadingOverlay" class="loading-overlay">
+  <div class="spinner"></div>
+</div>
+<body>
+  <link rel="stylesheet" href="{% static 'css/receptionist.css' %}">
+  
+
+  <main>
+    <div class="container">
+      <div class="row">
+        <div class="col-12">
+          <br>
+          <br>
+          <br>
+          <br>
+          <br>
+        </div>
+      </div>
+      <hr>
+
+      <section class="reservation-layout">
+        <form method="get" action="{% url 'receptionist' %}">
+          <div class="mb-3">
+              <input type="search" id="search_hr" name="q" class="form-control" placeholder="Search by Guest Name or Reference ID" autocomplete="on" value="{{ query }}">
+          </div>
+      </form>      
+
+        <div class="reservation-form">
+          <table >
+            <thead>
+              <tr>
+                <th>Reference ID</th>
+                <th>Guest Name</th>
+                <th>Check-in</th>
+                <th>Check-out</th>
+                <th>Room Type</th>
+                <th>Type of Booking</th>
+                <th>Status</th>
+                <th>TimeStamp</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for reservation in reservations %}
+              <tr>
+                <td data-label="Reference ID">{{ reservation.reference_id }}</td>
+                <td data-label="Guest Name">{{ reservation.firstname }} {{ reservation.lastname }}</td>
+                <td data-label="Check-in">{{ reservation.check_in }}</td>
+                <td data-label="Check-out">{{ reservation.check_out }}</td>
+                <td data-label="Room Type">{{ reservation.room_type }}</td>
+                <td data-label="Type of Booking">{{ reservation.typeofbooking }}</td>
+                <td data-label="Status">
+                  <select name="status" class="form-select" onchange="updateStatus('{{ reservation.reference_id }}', this.value)"
+                  {% if reservation.status == 'CHECKED-OUT' %}disabled{% endif %}>
+                    <option value="PENDING" {% if reservation.status == 'PENDING' %}selected{% endif %}>PENDING</option>
+                    <option value="CHECKED-IN" {% if reservation.status == 'CHECKED-IN' %}selected{% endif %}>CHECKED-IN</option>
+                    <option value="CHECKED-OUT" {% if reservation.status == 'CHECKED-OUT' %}selected{% endif %}>CHECKED-OUT</option>
+                    <option value="OVERSTAYING" {% if reservation.status == 'OVERSTAYING' %}selected{% endif %}>OVERSTAYING</option>
+                  </select>
+                </td>
+                <td data-label="TimeStamp" class="timestamp">{{ reservation.timestamp|date:"H:i:s" }}</td>
+              </tr>
+              {% empty %}
+              <tr>
+                <td colspan="8">No reservations found within the last 6 months.</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+    
+      
+      <!-- Logout Confirmation Modal -->
+      <div class="modal fade" id="logoutModal" tabindex="-1" aria-labelledby="logoutModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content glassy-modal">
+                <div class="modal-header border-0">
+                    <h5 class="modal-title text-light" id="logoutModalLabel">
+                        <i class="bi bi-exclamation-triangle-fill text-warning me-2"></i>
+                        Confirm Logout
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center">
+                    <p class="text-light">Are you sure you want to log out?</p>
+                    <i class="bi bi-question-circle-fill fs-1 text-light"></i>
+                </div>
+                <div class="modal-footer border-0 d-flex justify-content-center">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <a href="{% url 'logreg' %}" class="btn btn-danger">Log Out</a>
+                </div>
+            </div>
+        </div>
+      </div>
+
+      <!-- Forced Change Password Modal - phia -->
+      <!-- Forced Change Password Modal -->
+      <div class="modal fade" id="forcedChangePasswordModal" tabindex="-1" aria-labelledby="forcedChangePasswordModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title fw-bold" id="forcedChangePasswordModalLabel">Change Your Password</h5>
+            </div>
+            <div class="modal-body">
+              <form id="forcedChangePasswordForm">
+                <div class="mb-3">
+                  <label for="newPassword" class="form-label">New Password</label>
+                  <input type="password" class="form-control" id="newPassword" placeholder="Enter new password" required>
+                </div>
+                <div class="mb-3">
+                  <label for="confirmPassword" class="form-label">Confirm Password</label>
+                  <input type="password" class="form-control" id="confirmPassword" placeholder="Confirm new password" required>
+                </div>
+                <button type="button" class="btn btn-primary w-100" id="changePasswordButton">Submit</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+      <script>
+        // Update reservation status
+        function updateStatus(referenceId, status) {
+            const csrftoken = getCookie("csrftoken");
+    
+            // Show loading spinner
+            const loadingOverlay = document.getElementById("loadingOverlay");
+            loadingOverlay.style.display = "block";
+    
+            fetch("{% url 'update_status' %}", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded",
+                    "X-CSRFToken": csrftoken,
+                },
+                body: `reference_id=${referenceId}&status=${status}`,
+            })
+                .then((response) => response.json())
+                .then((data) => {
+                    if (data.success) {
+                        alert(`Successfully changed the status to "${status}" for reservation ${referenceId}`);
+                        if (status === "CHECKED-OUT") {
+                            location.reload();
+                        }
+                    } else {
+                        alert("Error updating status: " + data.error);
+                    }
+                })
+                .catch((error) => {
+                    console.error("Error:", error);
+                    alert("An unexpected error occurred while updating the status. Please try again.");
+                })
+                .finally(() => {
+                    // Hide loading spinner
+                    loadingOverlay.style.display = "none";
+                });
+        }
+    
+        // Apply class based on status
+        function applyStatusClass(selectElement) {
+            const status = selectElement.value;
+            selectElement.classList.remove("pending", "checked-in", "checked-out", "overstaying");
+    
+            if (status === "PENDING") {
+                selectElement.classList.add("pending");
+            } else if (status === "CHECKED-IN") {
+                selectElement.classList.add("checked-in");
+            } else if (status === "CHECKED-OUT") {
+                selectElement.classList.add("checked-out");
+            } else if (status === "OVERSTAYING") {
+                selectElement.classList.add("overstaying");
+            }
+        }
+    
+        // Initialize status dropdowns
+        document.querySelectorAll("select[name='status']").forEach((selectElement) => {
+            applyStatusClass(selectElement);
+            selectElement.addEventListener("change", () => {
+                const referenceId = selectElement.closest("tr").querySelector("[data-label='Reference ID']").textContent.trim();
+                applyStatusClass(selectElement);
+                updateStatus(referenceId, selectElement.value);
+            });
+        });
+    </script>
+    
+      
+      
+
+
+    </div>
+  </main>
+</body>
+{% endblock %}

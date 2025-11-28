@@ -1,0 +1,44 @@
+{% extends 'nav_gst.html' %}
+{% load static %}
+{% block title %}
+    My Account - JSX Hotel
+{% endblock %}
+
+{% block content %}
+<main>
+    <link rel="stylesheet" href="{% static 'css/account.css' %}">
+
+    <div class="container mt-5">
+  
+
+        <!-- Personal Information Form -->
+        <div class="col-md-8">
+            <h5 class="mb-4">Personal Information</h5>
+            <form>
+                <div class="row mb-3">
+                    <div class="col-md-4">
+                        <label for="first-name" class="form-label">First Name</label>
+                        <input type="text" id="first-name" class="form-control" value="{{ first_name }}" readonly>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="middle-name" class="form-label">Middle Name</label>
+                        <input type="text" id="middle-name" class="form-control" value="{{ middle_name }}" readonly>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="last-name" class="form-label">Last Name</label>
+                        <input type="text" id="last-name" class="form-control" value="{{ last_name }}" readonly>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label for="email" class="form-label">Email</label>
+                    <input type="email" id="email" class="form-control" value="{{ email }}" readonly>
+                </div>
+                <div class="mb-3">
+                    <label for="address" class="form-label">Address</label>
+                    <input type="text" id="address" class="form-control" value="{{ address }}" readonly>
+                </div>
+            </form>
+        </div>
+    </div>
+</main>
+{% endblock %}

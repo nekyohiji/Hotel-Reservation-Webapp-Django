@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/nav_gst.css' %}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <title>{% block title %}Dashboard{% endblock %}</title>
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="navbar-left">
+                <ul class="nav-list">
+                    <li class="nav-icon">
+                        <img src="{% static 'images/logo.png' %}" alt="Hotel Logo" style="height: 40px;">
+                    </li>
+                    <li class="hotel-label">
+                        <br>
+                        <label>JSX Hotel</label>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="navbar-right">
+                <ul class="nav-list">
+                    <li><a href="{% url 'dashboard' %}">Home</a></li>
+                    <li><a href="{% url 'reservations' %}">Reservations</a></li>
+                    <li><a href="{% url 'booking' %}">Booking</a></li>
+
+
+                        <ul class="notification-dropdown">
+                            <li>You have a new reservation.</li>
+                            <li>Your booking has been confirmed.</li>
+                            <li>Special discount offer available!</li>
+                        </ul>
+                    </li>
+                    <!-- Account Icon -->
+                    <li class="icon-link">
+                        <a href="{% url 'account' %}" title="Account">
+                            <i class="fas fa-user-circle"></i>
+                        </a>
+                    </li>
+                    <!-- Log-out Icon -->
+                    <li class="icon-link">
+                        <a href="{% url 'logout' %}" title="Log-out" onclick="return confirm('Are you sure you want to log out?');">
+                            <i class="fas fa-sign-out-alt"></i>
+                        </a>
+                    </li>
+                    
+                </ul>
+            </div>
+
+            <!-- Mobile menu toggle button (burger icon) -->
+            <div class="menu-toggle">
+                <i class="fas fa-bars"></i>
+                <ul class="dropdown-menu">
+                    <li><a href="{% url 'dashboard' %}">Home</a></li>
+                    <li><a href="{% url 'reservations' %}">Reservations</a></li>
+                    <li><a href="{% url 'booking' %}">Booking</a></li>
+                    <li><a href="{% url 'account' %}">Account</a></li>
+                    <li><a href="{% url 'logreg' %}">Log-out</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+
+
+    <div class="wrapper">
+        {% block content %}
+        {% endblock %}
+    </div>
+
+    <script src="{% static 'js/nav_gst.js' %}"></script>
+</body>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const notificationBadge = document.querySelector(".notification-badge");
+        const notificationDropdown = document.querySelector(".notification-dropdown");
+    
+        // Toggle mobile menu
+        const menuToggle = document.querySelector(".menu-toggle");
+        const dropdownMenu = document.querySelector(".dropdown-menu");
+    
+        menuToggle.addEventListener("click", function () {
+            dropdownMenu.classList.toggle("active");
+        });
+    
+        // Simulate new notifications dynamically
+        setTimeout(() => {
+            notificationBadge.textContent = "5"; // Update badge count
+            const newNotification = document.createElement("li");
+            newNotification.textContent = "Your room upgrade request has been approved.";
+            notificationDropdown.appendChild(newNotification);
+        }, 5000); // Add new notification after 5 seconds
+    });
+    
+
+</script>
+
+</html>

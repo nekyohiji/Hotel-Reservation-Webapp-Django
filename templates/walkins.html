@@ -1,0 +1,219 @@
+{% extends 'nav_hr.html' %}
+{% load static %}
+{% block title %}
+    Reservations - JSX Hotel
+{% endblock %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/walkins.css' %}">
+<div id="loadingOverlay" class="loading-overlay">
+    <div class="spinner"></div>
+</div>
+<div class="container mt-4">
+    <div class="form-section">
+        <form method="post" action="{% url 'submit_walk_in_reservation' %}">
+            {% csrf_token %}
+            <div class="form-content-container">
+                <!-- Left Column: Guest Information -->
+                <div class="guest-info-container">
+                    <h3>Guest Information</h3>
+                    <input type="text" id="firstNameInput" name="firstname" placeholder="First Name" required>
+                    <input type="text" id="middleNameInput" name="middlename" placeholder="Middle Name">
+                    <input type="text" id="lastNameInput" name="lastname" placeholder="Last Name" required>
+                    <input type="email" id="emailInput" name="email" placeholder="Email" required>
+
+        
+                    <div class="stay-duration mb-3">
+                        <label>Stay Duration:</label>
+                        <span id="total-days">0</span> days
+                    </div>
+        
+
+                    <!-- I ADDED THIS PLS FIX LAGI DAPAT SYA MAG AAPPEAR NOT CONDITIONAL AND PLS PACENTER-->
+                    <div class="bank mb-3">
+                        <label>Total Cost:</label>
+                        <span id="total-cost">0</span> PHP
+                        <small id="total-cost-note" style="color: gray;">
+                            Total cost includes all applicable taxes, fees, and charges.
+                        </small>
+                    </div>
+
+
+
+                    <!-- Date Inputs -->
+                    <div class="date-inputs">
+                        <label for="check-in-datetime">Check-in Date:</label>
+                        <input type="date" id="check-in-datetime_hr_wi" name="check_in" required>
+                        <label for="check-out-datetime">Check-out Date:</label>
+                        <input type="date" id="check-out-datetime_hr_wi" name="check_out" required>
+                        <button type="submit">Submit Reservation</button>
+                    </div>
+                </div>
+
+                <!-- Right Column: Room Selection -->
+                <div class="rooms-section">
+                    {% include 'rooms.html' %}
+                </div>
+            </div>
+
+
+        </form>
+    </div>
+</div>
+
+
+    <!-- Logout Confirmation Modal -->
+<div class="modal fade" id="logoutModal" tabindex="-1" aria-labelledby="logoutModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content glassy-modal">
+            <div class="modal-header border-0">
+                <h5 class="modal-title text-light" id="logoutModalLabel">
+                    <i class="bi bi-exclamation-triangle-fill text-warning me-2"></i>
+                    Confirm Logout
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-center">
+                <p class="text-light">Are you sure you want to log out?</p>
+                <i class="bi bi-question-circle-fill fs-1 text-light"></i>
+            </div>
+            <div class="modal-footer border-0 d-flex justify-content-center">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <a href="{% url 'logreg' %}" class="btn btn-danger">Log Out</a>
+            </div>
+         </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const checkInInput = document.getElementById('check-in-datetime_hr_wi');
+        const checkOutInput = document.getElementById('check-out-datetime_hr_wi');
+        const roomInputs = document.querySelectorAll('input[name="room"]');
+        const totalDaysElement = document.getElementById('total-days');
+        const totalCostElement = document.getElementById('total-cost');
+        const reservationForm = document.querySelector("form[action='{% url 'submit_walk_in_reservation' %}']");
+        const loadingOverlay = document.getElementById('loadingOverlay');
+        const maxReservationDuration = 6;
+    
+        function setDefaultDates() {
+            const today = new Date();
+            const tomorrow = new Date(today);
+            tomorrow.setDate(today.getDate() + 1);
+    
+            const todayString = today.toISOString().split('T')[0];
+            const tomorrowString = tomorrow.toISOString().split('T')[0];
+    
+            checkInInput.value = todayString;
+            checkOutInput.value = tomorrowString;
+    
+            checkInInput.setAttribute('min', todayString);
+            checkOutInput.setAttribute('min', tomorrowString);
+        }
+    
+        function validateDates() {
+            const checkInDate = new Date(checkInInput.value);
+            const checkOutDate = new Date(checkOutInput.value);
+    
+            if (checkOutDate <= checkInDate) {
+                alert("Check-out date must be after the check-in date.");
+                return false;
+            }
+    
+            const maxCheckOutDate = new Date(checkInDate);
+            maxCheckOutDate.setMonth(maxCheckOutDate.getMonth() + maxReservationDuration);
+    
+            if (checkOutDate > maxCheckOutDate) {
+                checkOutInput.value = maxCheckOutDate.toISOString().split('T')[0];
+                alert(`Reservations cannot exceed ${maxReservationDuration} months.`);
+                return false;
+            }
+    
+            checkOutInput.setAttribute('max', maxCheckOutDate.toISOString().split('T')[0]);
+            return true;
+        }
+    
+        function calculateTotalCost() {
+            if (!validateDates()) {
+                totalDaysElement.textContent = "0";
+                totalCostElement.textContent = "0";
+                return;
+            }
+    
+            const checkInDate = new Date(checkInInput.value);
+            const checkOutDate = new Date(checkOutInput.value);
+            const totalDays = Math.ceil((checkOutDate - checkInDate) / (1000 * 60 * 60 * 24));
+            totalDaysElement.textContent = totalDays;
+    
+            const selectedRoom = document.querySelector('input[name="room"]:checked');
+            if (!selectedRoom) {
+                totalCostElement.textContent = "0";
+                return;
+            }
+    
+            const roomPrice = parseFloat(
+                selectedRoom.closest('.room_gst').querySelector('.price').textContent.replace(/[^0-9.]/g, '')
+            );
+            totalCostElement.textContent = (totalDays * roomPrice).toLocaleString();
+        }
+    
+        function handleFormSubmission(event) {
+            event.preventDefault();
+    
+            if (!validateDates() || !document.querySelector('input[name="room"]:checked')) {
+                alert("Please complete all fields before submitting.");
+                return;
+            }
+    
+            loadingOverlay.style.display = 'block';
+    
+            const formData = new FormData(reservationForm);
+            fetch("{% url 'submit_walk_in_reservation' %}", {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': document.querySelector('[name="csrfmiddlewaretoken"]').value,
+                },
+                body: formData,
+            })
+                .then(response => response.json())
+                .then(data => {
+                    loadingOverlay.style.display = 'none';
+                    alert(data.message);
+                    if (data.success) {
+                        reservationForm.reset();
+                        setDefaultDates();
+                        calculateTotalCost();
+                    }
+                })
+                .catch(error => {
+                    loadingOverlay.style.display = 'none';
+                    alert("An error occurred. Please try again.");
+                    console.error(error);
+                });
+        }
+    
+        setDefaultDates();
+        calculateTotalCost();
+    
+        checkInInput.addEventListener('change', () => {
+            validateDates();
+            calculateTotalCost();
+        });
+        checkOutInput.addEventListener('change', () => {
+            validateDates();
+            calculateTotalCost();
+        });
+        roomInputs.forEach(input => {
+            input.addEventListener('change', calculateTotalCost);
+        });
+        reservationForm.addEventListener('submit', handleFormSubmission);
+    });
+    
+
+    setInterval(function () {
+        window.location.reload();
+    }, 120000); // 20,000 milliseconds = 10 seconds
+
+</script>
+
+{% endblock %}

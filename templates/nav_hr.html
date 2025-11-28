@@ -1,0 +1,89 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}JSX Hotel Receptionist{% endblock %}</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/nav_hr.css' %}">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.5/font/bootstrap-icons.min.css">
+</head>
+
+<body class="bg-dark text-light">
+    <!-- Sleek Dark Mode Navigation Bar -->
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top shadow">
+            <div class="container-fluid">
+                <!-- Logo and Hotel Name -->
+                <a class="navbar-brand d-flex align-items-center" href="#">
+                    <img src="{% static 'images/logo.png' %}" alt="JSX Hotel Logo" width="30" height="30">
+                </a>
+
+                <!-- Navbar Toggler for Mobile -->
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- Navbar Links, Real-Time Clock, Notification Icon, and Logout Icon -->
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <li class="nav-item">
+                            <a class="nav-link {% if request.resolver_match.url_name == 'receptionist' %}active{% endif %}" href="{% url 'receptionist' %}">Reservation</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link {% if request.resolver_match.url_name == 'walkins' %}active{% endif %}" href="{% url 'walkins' %}">Walk-ins</a>
+                        </li>
+                    </ul>
+
+                    <!-- Real-Time Clock -->
+                    <ul class="navbar-nav d-flex align-items-center">
+                        <li class="nav-item me-3">
+                            <span id="clock"></span>
+                        </li>
+
+                        <!-- Logout Icon -->
+                        <li class="nav-item">
+                            <a href="{% url 'logout' %}" class="nav-link d-flex align-items-center" onclick="return confirm('Are you sure you want to log out?');" title="Log out">
+                                <i class="bi bi-box-arrow-right fs-5 text-light"></i>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-12">
+                {% block content %}
+                {% endblock %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS (Optional, for Navbar Toggle) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Real-Time Clock Script -->
+    <script>
+        function updateClock() {
+            const clockElement = document.getElementById('clock');
+            const now = new Date();
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const seconds = String(now.getSeconds()).padStart(2, '0');
+            clockElement.textContent = `${hours}:${minutes}:${seconds}`;
+        }
+
+        // Update clock every second
+        setInterval(updateClock, 1000);
+        // Initialize clock on page load
+        updateClock();
+    </script>
+</body>
+</html>

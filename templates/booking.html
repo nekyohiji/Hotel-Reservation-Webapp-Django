@@ -1,0 +1,322 @@
+{% extends 'nav_gst.html' %}
+{% load static %}
+{% block title %}
+    Booking - JSX Hotel
+{% endblock %}
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/booking.css' %}">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display&family=Dancing+Script&family=Great+Vibes&family=Cinzel&family=Merriweather&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+<div class="container mt-4">
+    <form id="reservationForm" method="POST" enctype="multipart/form-data" action="{% url 'create_reservation' %}">
+        {% csrf_token %}
+
+        <div class="inline-layout">
+            <!-- Left Section: Reservation Form -->
+            <div class="reservation-form-container">
+                <div class="form-container">
+                    <div class="calendar-icon text-center mb-3">
+                        <i class="fas fa-calendar-alt"></i>
+                    </div>
+        
+                    <div class="headline">
+                        <h2>Make Your Reservations</h2>
+                    </div>
+        
+                    <div class="date-inputs-gst">
+                        <div class="date-input-container">
+                            <label for="check-in-datetime">Check-in:</label>
+                            <input type="date" id="check-in-datetime_gst_bk" name="check-in-datetime" class="form-control" required>
+                        </div>
+                        <div class="date-input-container">
+                            <label for="check-out-datetime">Check-out:</label>
+                            <input type="date" id="check-out-datetime_gst_bk" name="check-out-datetime" class="form-control" required>
+                        </div>
+                    </div>
+                    
+                    <div class="stay-duration mb-3">
+                        <label>Stay Duration:</label>
+                        <span id="total-days">0</span> days
+                    </div>
+        
+                    <div class="bank mb-3">
+                        <label>Account Number: 09811705605</label>
+                    </div>
+
+                    <!-- I ADDED THIS PLS FIX LAGI DAPAT SYA MAG AAPPEAR NOT CONDITIONAL AND PLS PACENTER-->
+                    <div class="bank mb-3">
+                        <label>Total Cost:</label>
+                        <span id="total-cost">0</span> PHP
+                        <small id="total-cost-note" style="color: gray;">
+                            Total cost includes all applicable taxes, fees, and charges.
+                        </small>
+                    </div>
+        
+                    <div class="upload-section mb-3">
+                        <button type="button" id="upload-receipt" class="btn btn-warning w-100">Upload Receipt</button>
+                        <input type="file" id="receipt-upload" name="receipt" style="display: none;" accept=".jpg, .jpeg, .png" required>
+        
+                        <div class="photo-container mt-3">
+                            <img id="uploaded-photo" src="" alt="Uploaded Photo" class="img-fluid" style="display: none;">
+                        </div>
+                        <button type="button" id="remove-photo" class="remove-photo w-100" style="display: none;">Remove Photo</button>
+                    </div>
+        
+                    <div class="submit-section text-center">
+                        <button id="reservationButton" type="submit" class="btn btn-success w-100" disabled>Submit Reservation</button>
+                    </div>
+                </div>
+            </div>
+        
+            <!-- Right Section: Rooms List -->
+            <div class="rooms-list-container">
+                <div class="card p-4 shadow-sm">
+                    {% include 'rooms.html' %}
+                </div>
+            </div>
+        </div>
+        <div id="loadingOverlay" class="loading-overlay">
+            <div class="spinner"></div>
+        </div>
+        
+    </form>
+</div>
+
+<script>
+    function showAlert(message) {
+        alert(message); // Display the alert with the provided message
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const checkInInput = document.getElementById('check-in-datetime_gst_bk');
+        const checkOutInput = document.getElementById('check-out-datetime_gst_bk');
+        const roomInputs = document.querySelectorAll('input[name="room"]');
+        const totalDaysElement = document.getElementById('total-days');
+        const totalCostElement = document.getElementById('total-cost');
+        const reservationForm = document.getElementById('reservationForm');
+        const loadingOverlay = document.getElementById('loadingOverlay');
+        const receiptUpload = document.getElementById('receipt-upload');
+        const uploadReceiptButton = document.getElementById('upload-receipt');
+        const uploadedPhoto = document.getElementById('uploaded-photo');
+        const removePhoto = document.getElementById('remove-photo');
+        const reservationButton = document.getElementById('reservationButton');
+        const maxReservationDuration = 6; // Maximum duration in months
+
+        // Disable buttons by default
+        uploadReceiptButton.disabled = true;
+        reservationButton.disabled = true;
+
+        // Helper to set default dates
+        function setDefaultDates() {
+            const today = new Date();
+            const tomorrow = new Date(today);
+            tomorrow.setDate(today.getDate() + 1);
+            const maxReservationDate = new Date(today);
+            maxReservationDate.setFullYear(today.getFullYear() + 5);
+
+            checkInInput.value = today.toISOString().split('T')[0];
+            checkOutInput.value = tomorrow.toISOString().split('T')[0];
+            checkInInput.setAttribute('min', today.toISOString().split('T')[0]);
+            checkInInput.setAttribute('max', maxReservationDate.toISOString().split('T')[0]);
+            checkOutInput.setAttribute('min', tomorrow.toISOString().split('T')[0]);
+            checkOutInput.setAttribute('max', maxReservationDate.toISOString().split('T')[0]);
+        }
+
+        // Helper to validate dates
+        function validateDates() {
+            const checkInDate = new Date(checkInInput.value);
+            const checkOutDate = new Date(checkOutInput.value);
+            if (checkOutDate <= checkInDate) {
+                showAlert("Check-out date must be after the check-in date.");
+                return false;
+            }
+            const maxCheckOutDate = new Date(checkInDate);
+            maxCheckOutDate.setMonth(maxCheckOutDate.getMonth() + maxReservationDuration);
+            if (checkOutDate > maxCheckOutDate) {
+                checkOutInput.value = maxCheckOutDate.toISOString().split('T')[0];
+                showAlert(`Reservations cannot exceed ${maxReservationDuration} months.`);
+                return false;
+            }
+            return true;
+        }
+
+        // Helper to validate the form
+        function validateForm() {
+            const selectedRoom = document.querySelector('input[name="room"]:checked');
+            const isReceiptUploaded = receiptUpload.value !== "";
+        
+            console.log("Selected room:", selectedRoom);
+            console.log("Receipt uploaded:", isReceiptUploaded);
+            console.log("Dates valid:", validateDates());
+        
+            // Enable/disable Upload Receipt button based on room selection
+            if (!validateDates() || !selectedRoom) {
+                console.log("Upload Receipt button disabled");
+                reservationButton.disabled = true;
+                uploadReceiptButton.disabled = true;
+            } else {
+                console.log("Upload Receipt button enabled");
+                reservationButton.disabled = true; // Keep reservation button disabled until receipt is uploaded
+                uploadReceiptButton.disabled = false;
+            }
+        
+            // Enable Reservation button only when all conditions are satisfied
+            if (validateDates() && selectedRoom && isReceiptUploaded) {
+                console.log("Reservation button enabled");
+                reservationButton.disabled = false;
+            }
+        }
+
+        // Helper to calculate total days and cost
+        function calculateTotalCost() {
+            if (!validateDates()) {
+                totalDaysElement.textContent = "0";
+                totalCostElement.textContent = "0";
+                return;
+            }
+
+            const checkInDate = new Date(checkInInput.value);
+            const checkOutDate = new Date(checkOutInput.value);
+            const totalDays = Math.ceil((checkOutDate - checkInDate) / (1000 * 60 * 60 * 24));
+            totalDaysElement.textContent = totalDays;
+
+            const selectedRoom = document.querySelector('input[name="room"]:checked');
+            if (!selectedRoom) {
+                totalCostElement.textContent = "0";
+                return;
+            }
+
+            const roomLabel = selectedRoom.closest('.room_gst');
+            const roomPrice = parseFloat(
+                roomLabel.querySelector('.price').textContent.replace(/[^0-9.]/g, '')
+            );
+            totalCostElement.textContent = (totalDays * roomPrice).toLocaleString(); // Format cost
+        }
+
+        // Helper to handle receipt upload
+        function handleReceiptUpload(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const validTypes = ['image/jpeg', 'image/png'];
+                if (validTypes.includes(file.type)) {
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        uploadedPhoto.src = e.target.result;
+                        uploadedPhoto.style.display = 'block';
+                        removePhoto.style.display = 'block';
+                        validateForm(); // Ensure form validation updates
+                    };
+                    reader.readAsDataURL(file);
+                } else {
+                    showAlert("Only .jpg and .png files are allowed.");
+                    resetReceiptUpload();
+                }
+            } else {
+                resetReceiptUpload();
+            }
+        }
+
+        // Helper to reset receipt upload
+        function resetReceiptUpload() {
+            receiptUpload.value = '';
+            uploadedPhoto.style.display = 'none';
+            removePhoto.style.display = 'none';
+            validateForm(); // Ensure form validation updates
+        }
+
+        // Helper to handle form submission
+        function handleFormSubmission(event) {
+            event.preventDefault(); // Prevent default submission
+
+            if (!validateDates()) return;
+
+            const selectedRoom = document.querySelector('input[name="room"]:checked');
+            if (!selectedRoom) {
+                showAlert("Please select a room to proceed with the reservation.");
+                return;
+            }
+
+            loadingOverlay.style.display = 'block'; // Show loading overlay
+
+            const formData = new FormData(reservationForm);
+            fetch('/create-reservation/', {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': getCookie('csrftoken')
+                },
+                body: formData
+            })
+                .then(response => response.json())
+                .then(data => {
+                    loadingOverlay.style.display = 'none'; // Hide loading overlay
+                    if (data.success) {
+                        showAlert(data.message);
+                        reservationForm.reset();
+                        totalDaysElement.textContent = "0";
+                        totalCostElement.textContent = "0";
+                        resetReceiptUpload();
+                    } else {
+                        showAlert(data.message); // Show error message
+                    }
+                })
+                .catch(error => {
+                    loadingOverlay.style.display = 'none'; // Hide loading overlay
+                    showAlert('An error occurred. Please try again.');
+                    console.error('Error:', error);
+                });
+        }
+
+        // Event listeners
+        setDefaultDates();
+        checkInInput.addEventListener('change', () => {
+            calculateTotalCost();
+            validateForm();
+        });
+        checkOutInput.addEventListener('change', () => {
+            calculateTotalCost();
+            validateForm();
+        });
+        roomInputs.forEach((input) => input.addEventListener('change', () => {
+            calculateTotalCost();
+            validateForm();
+        }));
+        uploadReceiptButton.addEventListener('click', () => {
+            receiptUpload.click(); // Properly trigger file input click
+        });
+        receiptUpload.addEventListener('change', (event) => {
+            handleReceiptUpload(event);
+            validateForm();
+        });
+        removePhoto.addEventListener('click', resetReceiptUpload);
+        reservationForm.addEventListener('submit', handleFormSubmission);
+
+        // Initial calculation on page load
+        calculateTotalCost();
+        validateForm();
+    });
+
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+</script>
+
+
+
+
+
+
+
+
+{% endblock %}

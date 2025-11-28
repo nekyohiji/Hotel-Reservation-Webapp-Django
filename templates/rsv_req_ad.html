@@ -1,0 +1,186 @@
+{% extends 'nav_ad.html' %}
+{% load static %}
+{% block title %}
+    Reservation Requests - JSX Hotel
+{% endblock %}
+{% block content %}
+
+<main>
+
+
+    <link rel="stylesheet" href="{% static 'css/rsv_req_ad.css' %}">
+
+
+    <div class="container">
+        <h2 class="center-title">Reservation Requests</h2>
+        <!-- Added table-wrapper div for centering the table -->
+        <div class="table-wrapper">
+            <table id="rsv_req_ad" class="responsive-table">
+                <thead> 
+                    <tr>
+                        <th>Reference ID</th>
+                        <th>Guest Name</th>
+                        <th>Check-in</th>
+                        <th>Check-out</th> 
+                        <th>Room Type</th>
+                        <th>Type of Booking</th>
+                        <th>Receipt</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody> 
+                    {% for reservation in reservations %}
+                    <tr data-reservation-id="{{ reservation.reference_id }}">
+                        <td data-label="Reference ID">{{ reservation.reference_id }}</td>
+                        <td data-label="Guest Name">{{ reservation.firstname }} {{ reservation.lastname}}</td>
+                        <td data-label="Check-in">{{ reservation.check_in }}</td>
+                        <td data-label="Check-out">{{ reservation.check_out }}</td>
+                        <td data-label="Room Type">{{ reservation.room_type }}</td>
+                        <td data-label="Type of Booking">{{ reservation.typeofbooking }}</td>
+                        <td data-label="Receipt">
+                            <a href="{{ reservation.receipt.url }}" target="_blank">View Receipt</a>
+                        </td>
+                        <td data-label="Status" class="request-status">{{ reservation.status}}</td>
+                        <td data-label="Actions">
+                            <button class="approve_btn">Approve</button>
+                            <button class="decline_btn">Decline</button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div id="loadingOverlay" class="loading-overlay">
+            <div class="spinner"></div>
+        </div>
+        <!-- Hidden CSRF token input for JavaScript to access -->
+        <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+    </div>
+</main>
+
+<script>
+    // Fetch and update reservations data
+    function fetchReservations() {
+        fetch('/rsv_req_ad/', {
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log("Fetched reservations data:", data);  // Log the data here
+            updateReservationTable(data);
+        })
+        .catch(error => console.error('Error fetching reservations:', error));
+    }
+
+    // Update the reservations table dynamically
+    function updateReservationTable(reservations) {
+        const reservationTableBody = document.querySelector('#rsv_req_ad tbody');
+        console.log("Updating table with data:", reservations);  // Log incoming data
+        reservationTableBody.innerHTML = '';  // Clear the table
+    
+        // Check if reservations is an array, if not, convert it to an array
+        if (!Array.isArray(reservations)) {
+            try {
+                reservations = JSON.parse(reservations);
+            } catch (error) {
+                console.error('Error parsing reservations:', error);
+                return;
+            }
+        }
+    
+        reservations.forEach(reservation => {
+            const fields = reservation.fields;
+            const newRow = document.createElement('tr');
+            newRow.setAttribute('data-reservation-id', reservation.pk);
+    
+            newRow.innerHTML = `
+                <td>${reservation.pk}</td>
+                <td>${fields.firstname} ${fields.lastname}</td>
+                <td>${fields.check_in}</td>
+                <td>${fields.check_out}</td>
+                <td>${fields.room_type}</td>
+                <td>${fields.typeofbooking}</td>
+                <td><a href="/media/${fields.receipt}" target="_blank">View Receipt</a></td>
+                <td class="request-status">${fields.status}</td>
+                <td>
+                    <button class="approve_btn">Approve</button>
+                    <button class="decline_btn">Decline</button>
+                </td>
+            `;
+            reservationTableBody.appendChild(newRow);
+        });
+    }
+
+    function updateRequestStatus(button, action) {
+        const row = button.closest('tr');
+        const reservationId = row.dataset.reservationId;
+        const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+    
+        // Show the overlay with spinner
+        const loadingOverlay = document.getElementById('loadingOverlay');
+        loadingOverlay.style.display = 'block';
+    
+        fetch(`/update-request-status/${reservationId}/`, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': csrfToken,
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ action: action }),
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    row.querySelector('.request-status').innerText = data.new_status;
+                    fetchReservations(); // Refresh table data
+    
+                    // Display success alert
+                    alert(`Action '${action}' completed successfully for reservation ${reservationId}.`);
+                } else {
+                    // Display error alert
+                    alert(`Error: ${data.message || 'An error occurred while processing the action.'}`);
+                }
+            })
+            .catch(error => {
+                console.error('Error updating reservation status:', error);
+                alert('An unexpected error occurred. Please try again later.');
+            })
+            .finally(() => {
+                // Hide the overlay after processing
+                loadingOverlay.style.display = 'none';
+            });
+    }
+    
+    
+    document.addEventListener('DOMContentLoaded', function() {
+        const reservationTableBody = document.querySelector('#rsv_req_ad tbody');
+
+        // Initial fetch
+        fetchReservations();
+
+        // Set up polling to fetch new data every 10 seconds
+        setInterval(fetchReservations, 10000);
+
+        reservationTableBody.addEventListener('click', function(event) {
+            if (event.target.classList.contains('approve_btn')) {
+                updateRequestStatus(event.target, 'approve');
+            }
+            if (event.target.classList.contains('decline_btn')) {
+                updateRequestStatus(event.target, 'decline');
+            }
+        });
+    });
+</script>
+
+
+
+
+{% endblock %}

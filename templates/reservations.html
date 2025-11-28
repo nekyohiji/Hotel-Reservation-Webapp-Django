@@ -1,0 +1,168 @@
+
+reservation cancel
+
+
+{% extends 'nav_gst.html' %}
+{% load static %}
+{% block title %}
+    Reservations - JSX Hotel
+{% endblock %}
+    
+{% block content %}
+<body>
+
+    <link rel="stylesheet" href="{% static 'css/reservations.css' %}">
+    <div class="video-background" id="video-background">
+        <video autoplay loop muted>
+            <source src="{% static 'videos/hotelroom.mp4' %}" type="video/mp4">
+        </video>
+    </div>
+
+
+<br>
+<br> 
+    <main>
+        <div class="main-content">
+            <div class="form-content">
+                <div id="reservation-page">
+                    <table id="rsv_req_rsvhr">
+                        <thead> 
+                            <tr>
+                                <th> Reference ID</th>
+                                <th> Guest Name</th>
+                                <th> Check-in </th>
+                                <th> Check-out </th> 
+                                <th> Room Type </th>
+                                <th> Type of Booking</th>
+                                <th> Receipt </th>
+                                <th> Status </th>
+                                <th> Cancellation Status </th>
+                                <th> Cancellation </th>
+                            </tr>
+                        </thead>
+                        <tbody> 
+                            {% for reservation in reservations %}
+                            <tr>
+                                <td>{{ reservation.reference_id }}</td>
+                                <td>{{ reservation.firstname }} {{ reservation.middlename }} {{ reservation.lastname }}</td>
+                                <td>{{ reservation.check_in }}</td>
+                                <td>{{ reservation.check_out }}</td>
+                                <td>{{ reservation.room_type }}</td>
+                                <td>{{ reservation.typeofbooking }}</td>
+                                <td>
+                                    {% if reservation.receipt %}
+                                        <a href="{{ reservation.receipt.url }}" target="_blank">View Receipt</a>
+                                    {% else %}
+                                        N/A
+                                    {% endif %}
+                                </td>
+                                <td>{{ reservation.status }}</td>
+                                <td>{{ reservation.cancelstatus }}</td>
+                                <td>
+                                    {% if reservation.cancelstatus == "CANCELLATION PENDING" %}
+                                        <button class="cancel-reservation" style="color: black; cursor: not-allowed;" disabled>Cancellation Requested</button>
+                                    {% elif reservation.cancelstatus == "CANCELLATION DECLINED" %}
+                                        <button class="cancel-reservation" style="color: black; cursor: not-allowed;" disabled>Cancellation Requested</button>
+                                    {% elif reservation.cancelstatus == "REJECTED" %}
+                                        <button class="cancel-reservation" style="color: black; cursor: not-allowed;" disabled>Cancel Rejected</button>
+                                    {% elif reservation.cancelstatus == "CANCELLATION APPROVED" %}
+                                        <button class="cancel-reservation" style="color: black; cursor: not-allowed;" disabled>Cancellation Approved</button>
+                                    {% elif reservation.status == "RESERVATION DECLINED" %}
+                                        <button class="cancel-reservation" style="color: black; cursor: not-allowed;" disabled>Cannot Cancel</button>
+                                    {% elif reservation.status == "WAITING FOR APPROVAL" %}
+                                        <button class="cancel-reservation" style="color: black; cursor: not-allowed;" disabled>Cannot Cancel</button>
+                                    {% elif reservation.status == "RESERVATION FINISHED" %}
+                                        <button class="cancel-reservation" style="color: black; cursor: not-allowed;" disabled>Cannot Cancel</button>
+                                    {% elif reservation.status == "CHECKED-OUT" %}
+                                        <button class="cancel-reservation" style="color: black; cursor: not-allowed;" disabled>Cannot Cancel</button>
+                                    {% elif reservation.status == "CHECKED-IN" %}
+                                        <button class="cancel-reservation" style="color: black; cursor: not-allowed;" disabled>Cannot Cancel</button>
+                                    {% elif reservation.status == "OVERSTAYING" %}
+                                        <button class="cancel-reservation" style="color: black; cursor: not-allowed;" disabled>Cannot Cancel</button>
+                                        
+                                    {% else %}
+                                        <button class="cancel-reservation" onclick="showCancelReason({{ reservation.reference_id }})">Cancel Reservation</button>
+                                        <div id="cancel-reason-{{ reservation.reference_id }}" style="display:none; margin-top:10px;">
+                                            <input type="text" id="reason-{{ reservation.reference_id }}" placeholder="Reason for cancellation" style="width: 80%; padding: 5px;">
+                                            <button onclick="submitCancellation({{ reservation.reference_id }})">Submit</button>
+                                            <button onclick="cancelCancelRequest({{ reservation.reference_id }})" style="margin-left: 10px;">Cancel</button>
+                                        </div>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+
+                    </table>
+                    <script>
+                        // Function to show cancellation reason input
+                        function showCancelReason(referenceId) {
+                            const cancelReasonDiv = document.getElementById(`cancel-reason-${referenceId}`);
+                            if (cancelReasonDiv) {
+                                cancelReasonDiv.style.display = 'block';
+                            }
+                        }
+                    
+                        // Function to submit the cancellation reason
+                        function submitCancellation(referenceId) {
+                            const reasonInput = document.getElementById(`reason-${referenceId}`);
+                            if (!reasonInput) {
+                                alert("Reason input not found.");
+                                return;
+                            }
+                    
+                            const reason = reasonInput.value.trim();
+                            if (!reason) {
+                                alert("Please provide a reason for the cancellation.");
+                                return;
+                            }
+                    
+                            fetch(`/cancel-reservation/${referenceId}/`, {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    'X-CSRFToken': '{{ csrf_token }}' // Include CSRF token for security
+                                },
+                                body: JSON.stringify({ reason })
+                            })
+                            .then(response => response.json())
+                            .then(data => {
+                                if (data.success) {
+                                    alert("Cancellation request submitted successfully.");
+                                    location.reload();  // Reload to reflect the updated cancellation request status
+                                } else {
+                                    alert("Failed to submit cancellation. Please try again later.");
+                                }
+                            })
+                            .catch(error => {
+                                console.error('Error:', error);
+                                alert("An error occurred while submitting the cancellation request. Please try again.");
+                            });
+                        }
+                    
+                        // Function to cancel the cancellation request
+                        function cancelCancelRequest(referenceId) {
+                            const cancelReasonDiv = document.getElementById(`cancel-reason-${referenceId}`);
+                            const reasonInput = document.getElementById(`reason-${referenceId}`);
+                            if (cancelReasonDiv) {
+                                cancelReasonDiv.style.display = 'none';
+                            }
+                            if (reasonInput) {
+                                reasonInput.value = ''; // Clear the input field
+                            }
+                        }
+                    
+                        // Auto-refresh the page every 20 seconds
+                        setInterval(function(){
+                            location.reload();
+                        }, 20000);
+                    </script>
+                    
+
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+
+{% endblock %}

@@ -1,0 +1,242 @@
+{% extends 'nav_gst.html' %}
+{% load static %}
+
+{% block title %}
+Dashboard - JSX Hotel
+{% endblock %}
+
+{% block content %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display&family=Dancing+Script&family=Great+Vibes&family=Cinzel&family=Merriweather&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+
+<main class="hero-section">
+    <!-- Video Background -->
+    <div class="video-background" id="video-background">
+        <video autoplay loop muted>
+            <source src="{% static 'videos/hotelroom.mp4' %}" type="video/mp4">
+        </video>
+    </div>
+
+
+
+    <!-- Content Overlay on Video -->
+    <div class="content-container">
+        <div class="content">
+            <img class="logo_" src="{% static 'images/logo.png' %}" alt="Hotel Logo">
+            <h3> ... Here is our Featured Destinations ... </h3>
+            <h1 class="title">WELCOME TO JSX HOTEL</h1>
+            <p class="description">Welcome to JSX Hotel! Book your stay with ease and enjoy a seamless reservation experience. We look forward to making your visit comfortable and memorable.</p>
+            <button class="discover-button" onclick="window.location.href='{% url 'booking' %}'">BOOK NOW</button>
+        </div>
+    </div>
+
+    <!-- Destination Cards -->
+    <div class="destination-cards-container">
+        <div class="destination-cards">
+            {% for image in images %}
+            <div class="card item" 
+                data-location="{{ image.title|default:'Unknown Location' }}" 
+                data-title="{{ image.description|default:'No Description Available' }}" 
+                {% if image.image %}
+                    data-bg="{{ image.image.url }}">
+                {% else %}
+                    data-bg="{% static 'images/blank image.png' %}"
+                {% endif %}
+                <p class="card-location">{{ image.title|default:'Unknown Location' }}</p>
+                <h3 class="card-title">{{ image.description|default:'No Description Available' }}</h3>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+
+<!-- Modal Structure -->
+<div id="card-modal" class="modal">
+    <div class="modal-content">
+        <span class="close-button">&times;</span>
+        <div class="modal-image" id="modal-image"></div>
+        <div class="modal-text">
+            <h2 id="modal-title">Title</h2>
+            <p id="modal-description">Description</p>
+        </div>
+    </div>
+</div>
+
+
+
+<script src="{% static 'js/script.js' %}"></script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const destinationCards = document.querySelector(".destination-cards");
+        const cards = document.querySelectorAll(".card");
+        const videoBackground = document.getElementById("video-background"); // Reference for the background container
+        let currentIndex = 0;
+        let autoRotateInterval;
+
+        // Set up the background images on the cards
+        cards.forEach(card => {
+            const bgImage = card.getAttribute("data-bg") || "";
+            if (bgImage) {
+                card.style.backgroundImage = `url(${bgImage})`; // Set background for the card itself
+            }
+        });
+
+        // Function to update the main screen background and highlight the selected card
+        function updateBackground(index) {
+            const selectedCard = cards[index];
+            const bgImage = selectedCard.getAttribute("data-bg") || "";
+            
+            // Set the main screen background to the selected card's image
+            if (bgImage) {
+                videoBackground.style.backgroundImage = `url(${bgImage})`; // Apply background image to video background div
+            }
+
+            // Highlight and enlarge the selected card
+            cards.forEach(card => card.classList.remove("featured"));
+            selectedCard.classList.add("featured");
+        }
+
+        // Function to start auto-rotation
+        function startAutoRotate() {
+            autoRotateInterval = setInterval(() => {
+                currentIndex = (currentIndex + 1) % cards.length;
+                updateBackground(currentIndex);
+            }, 5000); // Rotate every 5 seconds
+        }
+
+        // Function to stop auto-rotation
+        function stopAutoRotate() {
+            clearInterval(autoRotateInterval);
+        }
+
+        // Event listener for card click to update the main screen background and restart auto-rotation
+        cards.forEach((card, index) => {
+            card.addEventListener("click", () => {
+                currentIndex = index;
+                updateBackground(currentIndex);
+                stopAutoRotate();
+                startAutoRotate();
+            });
+        });
+
+        // Initialize the background with the first card and start auto-rotation
+        updateBackground(currentIndex);
+        startAutoRotate();
+
+        // Refresh the page every 20 seconds to get new images uploaded by the admin
+        setInterval(() => {
+            location.reload(); // This will refresh the entire page to reflect any new changes in the database
+        }, 20000); // Refresh every 20 seconds
+    });document.addEventListener("DOMContentLoaded", function () {
+        const burgerMenu = document.getElementById('burger-menu');
+        const dropdownMenu = document.getElementById('dropdown-menu');
+        const navLinks = document.querySelectorAll('.dropdown-list a');
+        const sidebarItems = document.querySelectorAll(".admin-sidebar-item");
+    
+        // Toggle dropdown menu visibility for mobile
+        const toggleDropdown = () => {
+            dropdownMenu.style.display = dropdownMenu.style.display === 'block' ? 'none' : 'block';
+        };
+    
+        // Toggle dropdown menu when the burger menu is clicked
+        burgerMenu.addEventListener('click', toggleDropdown);
+    
+        // Close dropdown menu when clicking outside of it
+        document.addEventListener('click', function (event) {
+            if (!burgerMenu.contains(event.target) && !dropdownMenu.contains(event.target)) {
+                dropdownMenu.style.display = 'none';
+            }
+        });
+    
+        // Close the dropdown menu when a navigation link is clicked
+        navLinks.forEach(link => {
+            link.addEventListener('click', function () {
+                dropdownMenu.style.display = 'none';
+            });
+        });
+    
+        // Handle window resize to close the dropdown on larger screens
+        window.addEventListener('resize', function () {
+            if (window.innerWidth > 768) {
+                dropdownMenu.style.display = 'none';
+            }
+        });
+    
+        // Ensure the dropdown menu is hidden initially
+        window.addEventListener('load', function () {
+            dropdownMenu.style.display = 'none';
+        });
+    
+        // Active sidebar item on click
+        sidebarItems.forEach(item => {
+            item.addEventListener("click", function () {
+                // Remove active class from all items
+                sidebarItems.forEach(i => i.classList.remove("admin-active"));
+    
+                // Add active class to clicked item
+                this.classList.add("admin-active");
+            });
+        });
+    });
+
+
+
+
+
+    document.addEventListener("DOMContentLoaded", () => {
+        const cards = document.querySelectorAll(".card");
+        const modal = document.getElementById("card-modal");
+        const modalImage = document.getElementById("modal-image");
+        const modalTitle = document.getElementById("modal-title");
+        const modalDescription = document.getElementById("modal-description");
+        const closeButton = document.querySelector(".close-button");
+    
+        // Function to open the modal and populate content
+        function openModal(card) {
+            const bgImage = card.getAttribute("data-bg") || "";
+            const title = card.getAttribute("data-title") || "No Title";
+            const description = card.getAttribute("data-location") || "No Description";
+    
+            modalImage.style.backgroundImage = `url(${bgImage})`;
+            modalTitle.textContent = title;
+            modalDescription.textContent = description;
+    
+            modal.style.display = "block"; // Show the modal
+        }
+    
+        // Function to close the modal
+        function closeModal() {
+            modal.style.display = "none"; // Hide the modal
+        }
+    
+        // Add event listener to each card
+        cards.forEach(card => {
+            card.addEventListener("click", () => {
+                openModal(card);
+            });
+        });
+    
+        // Add event listener to the close button
+        closeButton.addEventListener("click", closeModal);
+    
+        // Close modal when clicking outside the modal content
+        window.addEventListener("click", (event) => {
+            if (event.target === modal) {
+                closeModal();
+            }
+        });
+    });
+    
+    
+</script>
+
+
+
+
+
+
+
+{% endblock %}

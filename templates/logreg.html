@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | Register</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{% static 'css/logreg.css' %}">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+
+<body style="background-image: url('{% static "images/aa.jpg" %}'); background-size: cover; background-position: center;">
+    <div id="loadingOverlay" class="loading-overlay">
+        <div class="spinner"></div>
+    </div>
+    <!-- Main Container -->
+    <div class="container d-flex justify-content-center align-items-center min-vh-100">
+        <div class="row shadow box-area">
+            <!-- Left Box -->
+            <div class="col-md-6 rounded-4 d-flex justify-content-center align-items-center flex-column left-box">
+                <div class="featured-image mb-3">
+                    <img src="{% static 'images/logo.png' %}" class="img-fluid" alt="Hotel Logo" style="height: 100px;">
+                </div>
+                <h2 class="text-white fw-bold mb-3">Welcome to JSX Hotel</h2>
+                <p class="text-white text-center">Don't have an account? Register Now!</p>
+                <button class="btn btn-light fw-bold" id="toggle-btn">Register Account</button>
+            </div>
+
+            <!-- Right Box -->
+            <div class="col-md-6 right-box rounded-5">
+                <div class="container">
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="alert alert-{{ message.tags }}">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+                
+                <!-- Login Form -->
+                <form id="login-form" method="POST" action="{% url 'login_view' %}">
+                    {% csrf_token %}
+                    <h2 class="mb-4 text-center fw-bold">Login</h2>
+                    <div class="input-group mb-3">
+                        <input type="text" class="input-field" id="usernameInput" name="username" placeholder="Username" required>
+                    </div>
+
+                    <div class="password-wrapper">
+                        <input type="password" class="input-field" id="passwordInput" name="password" placeholder="Password" required>
+                        <i class="fas fa-eye toggle-password"></i>
+                    </div>
+                    <div class="d-flex justify-content-between mb-4">
+                        <a href="#" class="text-decoration-none" data-bs-toggle="modal" data-bs-target="#forgotPasswordModal">Forgot Password?</a>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">Sign In</button>
+                </form>
+
+                <!-- Register Form -->
+                <form id="registrationForm" class="d-none" method="POST" action="{% url 'create_account' %}">
+                    <meta name="csrf-token" content="{{ csrf_token }}">
+                    <h2 class="mb-4 text-center fw-bold">Register</h2>
+                    <input type="text" class="input-field" name="firstname" placeholder="First Name" required>
+                    <input type="text" class="input-field" name="middlename" placeholder="Middle Name">
+                    <input type="text" class="input-field" name="lastname" placeholder="Last Name" required>
+                    <div class="input-wrapper">
+                        <label for="birthday" class="input-label">Birthday</label>
+                        <input type="date" class="input-field" name="birthday" id="birthday" required>
+                    </div>
+                    <input type="text" class="input-field" name="address" placeholder="Address" required>
+                    <input type="email" class="input-field" name="email" placeholder="Email" required>
+                    <input type="text" class="input-field" name="username" placeholder="Username" required>
+                    <div class="password-wrapper">
+                        <input type="password" class="input-field" name="password" placeholder="Password" required>
+                        <i class="fas fa-eye toggle-password"></i>
+                    </div>
+                    <div class="password-wrapper">
+                        <input type="password" class="input-field" name="confirmpassword" placeholder="Confirm Password" required>
+                        <i class="fas fa-eye toggle-password"></i>
+                    </div>
+                    <hr>
+                    <button type="submit" class="btn btn-success fw-bold w-100">Register</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Forgot Password Modal -->
+    <div class="modal fade" id="forgotPasswordModal" tabindex="-1" aria-labelledby="forgotPasswordModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title fw-bold">Forgot Password</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="input-group mb-3">
+                        <input type="email" id="emailInput" class="form-control" placeholder="Enter your email">
+                    </div>
+                    <button class="btn btn-light fw-bold w-100 mb-3" id="sendOtpBtn">Send OTP</button>
+                    <span id="countdown" style="display: none; color: red; font-size: 14px; text-align: center;"></span>
+                    <div class="input-group mb-3">
+                        <input type="text" id="otpInput" class="form-control" placeholder="Enter OTP" disabled>
+                    </div>
+                    <button class="btn btn-success fw-bold w-100" id="submitOtpBtn" disabled>Submit OTP</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<!-- Create New Password Modal -->
+<div class="modal fade" id="createPasswordModal" tabindex="-1" aria-labelledby="createPasswordModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title fw-bold" id="createPasswordModalLabel">Create New Password</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="input-group mb-3">
+                    <input type="password" id="newPasswordInput" class="form-control" placeholder="Create New Password">
+                    <span class="input-group-text">
+                        <i class="fa fa-eye" id="toggleNewPassword" style="cursor: pointer;"></i>
+                    </span>
+                </div>
+                <div class="input-group mb-3">
+                    <input type="password" id="confirmPasswordInput" class="form-control" placeholder="Confirm Password">
+                    <span class="input-group-text">
+                        <i class="fa fa-eye" id="toggleConfirmPassword" style="cursor: pointer;"></i>
+                    </span>
+                </div>
+                <button class="btn btn-success fw-bold w-100" id="submitPasswordBtn">Submit</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+    <!-- JavaScript -->
+    <script>
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const birthdayInput = document.getElementById('birthday');
+            const today = new Date();
+            const maxDate = new Date(today.getFullYear() - 18, today.getMonth(), today.getDate());
+            const minDate = new Date(today.getFullYear() - 110, today.getMonth(), today.getDate());
+            birthdayInput.setAttribute('max', maxDate.toISOString().split('T')[0]);
+            birthdayInput.setAttribute('min', minDate.toISOString().split('T')[0]);
+        });
+
+        // Helper function to get CSRF token
+        function getCsrfToken() {
+            const csrfTokenElement = document.querySelector('meta[name="csrf-token"]');
+            return csrfTokenElement ? csrfTokenElement.getAttribute('content') : '';
+        }
+    
+        const registrationForm = document.getElementById('registrationForm');
+        const toggleBtn = document.getElementById('toggle-btn');
+        const loginForm = document.getElementById('login-form');
+    
+        // Toggle Between Login and Register Forms
+        toggleBtn.addEventListener('click', () => {
+            console.log("Toggle button clicked.");
+            if (loginForm.classList.contains('d-none')) {
+                console.log("Switching to login form.");
+                loginForm.classList.remove('d-none');
+                registrationForm.classList.add('d-none');
+                toggleBtn.textContent = "Register Account";
+            } else {
+                console.log("Switching to register form.");
+                loginForm.classList.add('d-none');
+                registrationForm.classList.remove('d-none');
+                toggleBtn.textContent = "Back to Login";
+            }
+        });
+
+        
+    
+        // Forgot Password and OTP Functionality
+        document.addEventListener('DOMContentLoaded', () => {
+            const sendOtpBtn = document.getElementById('sendOtpBtn');
+            const submitOtpBtn = document.getElementById('submitOtpBtn');
+            const submitPasswordBtn = document.getElementById('submitPasswordBtn');
+            const emailInput = document.getElementById('emailInput');
+            const otpInput = document.getElementById('otpInput');
+            const newPasswordInput = document.getElementById('newPasswordInput');
+            const confirmPasswordInput = document.getElementById('confirmPasswordInput');
+            const countdownElement = document.getElementById('countdown');
+    
+            function startCountdown(seconds) {
+                let remainingTime = seconds;
+                countdownElement.style.display = 'block';
+                sendOtpBtn.disabled = true;
+    
+                const interval = setInterval(() => {
+                    const minutes = Math.floor(remainingTime / 60);
+                    const seconds = remainingTime % 60;
+                    countdownElement.textContent = `You can resend OTP in ${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+                    remainingTime--;
+    
+                    if (remainingTime < 0) {
+                        clearInterval(interval);
+                        countdownElement.style.display = 'none';
+                        sendOtpBtn.disabled = false;
+                    }
+                }, 1000);
+            }
+    
+            // Send OTP Functionality
+            if (sendOtpBtn) {
+                sendOtpBtn.addEventListener('click', () => {
+                    const email = emailInput.value.trim();
+                    console.log("Send OTP button clicked");
+                    console.log("Email input:", email);
+            
+                    if (!email) {
+                        alert('Please enter your email.');
+                        return;
+                    }
+            
+                    // Disable the button and start the countdown
+                    startCountdown(600); // 10 minutes in seconds
+            
+                    fetch('/forgot-password/', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRFToken': getCsrfToken(),
+                        },
+                        body: JSON.stringify({ email }),
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            console.log("Response data:", data);
+                            if (data.status === 'success') {
+                                alert('OTP sent to your email.');
+                                otpInput.disabled = false;
+                                submitOtpBtn.disabled = false;
+                            } else {
+                                alert(data.message);
+            
+                                // Re-enable the button if there's an error
+                                resetCountdown();
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Fetch Error:', error);
+                            alert('An error occurred while sending the OTP.');
+            
+                            // Re-enable the button if there's an error
+                            resetCountdown();
+                        });
+                });
+            }
+            
+    
+            // Submit OTP Functionality
+            if (submitOtpBtn) {
+                submitOtpBtn.addEventListener('click', () => {
+                    const email = emailInput.value.trim();
+                    const otp = otpInput.value.trim();
+
+                    if (!otp) {
+                        alert('Please enter the OTP.');
+                        return;
+                    }
+
+                    fetch('/verify-otp/', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRFToken': getCsrfToken(),
+                        },
+                        body: JSON.stringify({ email, otp }),
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.status === 'success') {
+                                alert('OTP verified successfully.');
+
+                                // Enable the password input fields
+                                newPasswordInput.disabled = false;
+                                confirmPasswordInput.disabled = false;
+                                submitPasswordBtn.disabled = false;
+
+                                // Close the "Forgot Password" modal
+                                const forgotPasswordModal = bootstrap.Modal.getInstance(document.getElementById('forgotPasswordModal'));
+                                forgotPasswordModal.hide();
+
+                                // Show the "Create New Password" modal
+                                const createPasswordModal = new bootstrap.Modal(document.getElementById('createPasswordModal'));
+                                createPasswordModal.show();
+                            } else {
+                                alert(data.message);
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Fetch Error:', error);
+                            alert('An error occurred while verifying the OTP.');
+                        });
+                });
+            }
+
+    
+            // Reset Password Functionality
+            if (submitPasswordBtn) {
+                submitPasswordBtn.addEventListener('click', () => {
+                    const email = emailInput.value.trim();
+                    const newPassword = newPasswordInput.value.trim();
+                    const confirmPassword = confirmPasswordInput.value.trim();
+    
+                    if (!newPassword || newPassword !== confirmPassword) {
+                        alert('Passwords do not match.');
+                        return;
+                    }
+    
+                    fetch('/reset-password/', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRFToken': getCsrfToken(),
+                        },
+                        body: JSON.stringify({ email, new_password: newPassword }),
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.status === 'success') {
+                                alert('Password reset successful.');
+                            } else {
+                                alert('Error: ' + data.message);
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Fetch error:', error);
+                            alert('An unexpected error occurred.');
+                        });
+                });
+            }
+        });
+    
+        // Registration Form Submission
+        registrationForm.addEventListener('submit', (event) => {
+            event.preventDefault();
+        
+            // Show the loading overlay
+            const loadingOverlay = document.getElementById('loadingOverlay');
+            loadingOverlay.style.display = 'flex';
+        
+            // Gather form data
+            const formData = {
+                firstname: registrationForm.querySelector('input[name="firstname"]').value,
+                middlename: registrationForm.querySelector('input[name="middlename"]').value || '',
+                lastname: registrationForm.querySelector('input[name="lastname"]').value,
+                birthday: registrationForm.querySelector('input[name="birthday"]').value,
+                address: registrationForm.querySelector('input[name="address"]').value,
+                email: registrationForm.querySelector('input[name="email"]').value,
+                username: registrationForm.querySelector('input[name="username"]').value,
+                password: registrationForm.querySelector('input[name="password"]').value,
+                confirmpassword: registrationForm.querySelector('input[name="confirmpassword"]').value,
+            };
+        
+            console.log("Form data:", formData);
+        
+            // Validate inputs
+            if (formData.password.length < 8) {
+                alert("Password must be at least 8 characters long.");
+                loadingOverlay.style.display = 'none'; // Hide overlay
+                return;
+            }
+        
+            if (formData.password !== formData.confirmpassword) {
+                alert("Passwords do not match.");
+                loadingOverlay.style.display = 'none'; // Hide overlay
+                return;
+            }
+        
+            if (formData.username === "JSXHOTEL_ADMIN") {
+                alert("The username 'JSXHOTEL_ADMIN' is reserved and cannot be used.");
+                loadingOverlay.style.display = 'none'; // Hide overlay
+                return;
+            }
+        
+            // Send request to server
+            fetch('/create-account/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCsrfToken(),
+                },
+                body: JSON.stringify(formData),
+            })
+                .then((response) => {
+                    if (!response.ok) {
+                        // If the response is not OK, attempt to parse the error message
+                        return response.json().then((data) => {
+                            throw new Error(data.message || 'An unexpected error occurred.');
+                        });
+                    }
+                    return response.json();
+                })
+                .then((data) => {
+                    if (data.status === 'success') {
+                        alert('Account created successfully!');
+                        registrationForm.reset();
+                    } else {
+                        // Handle specific error cases from the backend
+                        alert(`Error: ${data.message}`);
+                    }
+                })
+                .catch((error) => {
+                    // Display any caught errors
+                    console.error('Error:', error);
+                    alert(error.message);
+                })
+                .finally(() => {
+                    // Hide the loading overlay after completion
+                    loadingOverlay.style.display = 'none';
+                });
+        });
+
+        function startCountdown(seconds) {
+            let remainingTime = seconds;
+            const countdownElement = document.getElementById('countdown');
+            
+            // Show the countdown
+            countdownElement.style.display = 'block';
+            sendOtpBtn.disabled = true;
+        
+            const interval = setInterval(() => {
+                const minutes = Math.floor(remainingTime / 60);
+                const seconds = remainingTime % 60;
+        
+                countdownElement.textContent = `You can resend OTP in ${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+                remainingTime--;
+        
+                if (remainingTime < 0) {
+                    clearInterval(interval);
+                    resetCountdown();
+                }
+            }, 1000);
+        }
+        
+        function resetCountdown() {
+            const countdownElement = document.getElementById('countdown');
+            countdownElement.style.display = 'none';
+            countdownElement.textContent = ''; // Clear the countdown text
+            sendOtpBtn.disabled = false; // Re-enable the button
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // Function to initialize the show password functionality
+            const addPasswordToggle = (wrapper) => {
+                const passwordInput = wrapper.querySelector('.input-field[type="password"]');
+                const togglePassword = wrapper.querySelector('.toggle-password');
+        
+                // Show the toggle icon when typing starts
+                passwordInput.addEventListener('input', () => {
+                    if (passwordInput.value.length > 0) {
+                        togglePassword.style.display = 'inline'; // Show the icon
+                    } else {
+                        togglePassword.style.display = 'none'; // Hide the icon
+                    }
+                });
+        
+                // Add click event to toggle password visibility
+                togglePassword.addEventListener('click', () => {
+                    if (passwordInput.type === 'password') {
+                        passwordInput.type = 'text'; // Show password
+                    } else {
+                        passwordInput.type = 'password'; // Hide password
+                    }
+        
+                    // Toggle icon class between 'fa-eye' and 'fa-eye-slash'
+                    togglePassword.classList.toggle('fa-eye');
+                    togglePassword.classList.toggle('fa-eye-slash');
+                });
+        
+                // Initially hide the toggle-password icon
+                togglePassword.style.display = 'none';
+            };
+        
+            // Apply the functionality to all password wrappers
+            document.querySelectorAll('.password-wrapper').forEach(addPasswordToggle);
+        });
+        
+        document.getElementById('toggleNewPassword').addEventListener('click', function () {
+            const passwordInput = document.getElementById('newPasswordInput');
+            const icon = this;
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                passwordInput.type = 'password';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        });
+        
+        document.getElementById('toggleConfirmPassword').addEventListener('click', function () {
+            const passwordInput = document.getElementById('confirmPasswordInput');
+            const icon = this;
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                passwordInput.type = 'password';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        });
+        
+
+    </script>
+    
+
+
+</body>
+</html>

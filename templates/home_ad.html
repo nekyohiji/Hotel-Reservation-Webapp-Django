@@ -1,0 +1,229 @@
+{% extends 'nav_ad.html' %}
+{% load static %}
+{% block title %}
+    Home - JSX Hotel
+{% endblock %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/home_ad.css' %}">
+
+<div class="main-content">
+    <div class="container section-header">
+        <h2>Admin Dashboard</h2>
+        <p>Welcome to the admin panel. Use the sidebar to navigate through different sections.</p>
+    </div>
+    <div class="main-content">
+        <h2 class="section-header">Image Management</h2>
+        <div class="image-container">
+
+            <!-- Card 1 -->
+            <div class="image-item">
+                <form id="form1" action="{% url 'admin_homepage_edit' %}" method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    
+                    <h3 id="title1" class="image-title">{{ images.0.title }}</h3>
+                    <input type="text" name="title1" value="{{ images.0.title }}" class="title-input" style="display: none;">
+                    
+                    <p id="description1" class="image-description">{{ images.0.description }}</p>
+                    <textarea name="description1" class="description-input" style="display: none;">{{ images.0.description }}</textarea>
+                    
+                    {% if images.0.image %}
+                        <img id="image1" src="{{ images.0.image.url }}" alt="Image 1" style="width: 100px; height: auto; margin-top: 10px;">
+                    {% else %}
+                        <p>No Image Available</p>
+                    {% endif %}
+                    
+                    <label for="file1" class="choose-file-button" style="display: none;">Choose File</label>
+                    <input type="file" id="file1" name="file1" class="file-input" accept="image/*" style="display: none;" onchange="showSaveButton(1); previewImage(1)">
+                    
+                    <button class="edit-button" type="button" onclick="toggleEdit(1)">Edit</button>
+                    <button type="submit" class="save-button" style="display: none;">Save</button>
+                    <button type="button" class="delete-button" onclick="resetImage(1)" style="display: none;">Cancel</button>
+                </form>
+            </div>
+
+            <!-- Repeat for Card 2 -->
+            <div class="image-item">
+                <form id="form2" action="{% url 'admin_homepage_edit' %}" method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    
+                    <h3 id="title2" class="image-title">{{ images.1.title }}</h3>
+                    <input type="text" name="title2" value="{{ images.1.title }}" class="title-input" style="display: none;">
+                    
+                    <p id="description2" class="image-description">{{ images.1.description }}</p>
+                    <textarea name="description2" class="description-input" style="display: none;">{{ images.1.description }}</textarea>
+                    
+                    {% if images.1.image %}
+                        <img id="image2" src="{{ images.1.image.url }}" alt="Image 2" style="width: 100px; height: auto; margin-top: 10px;">
+                    {% else %}
+                        <p>No Image Available</p>
+                    {% endif %}
+                    
+                    <label for="file2" class="choose-file-button" style="display: none;">Choose File</label>
+                    <input type="file" id="file2" name="file2" class="file-input" accept="image/*" style="display: none;" onchange="showSaveButton(2); previewImage(2)">
+                    
+                    <button class="edit-button" type="button" onclick="toggleEdit(2)">Edit</button>
+                    <button type="submit" class="save-button" style="display: none;">Save</button>
+                    <button type="button" class="delete-button" onclick="resetImage(2)" style="display: none;">Cancel</button>
+                </form>
+            </div>
+
+            <!-- Repeat for Card 3 -->
+            <div class="image-item">
+                <form id="form3" action="{% url 'admin_homepage_edit' %}" method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    
+                    <h3 id="title3" class="image-title">{{ images.2.title }}</h3>
+                    <input type="text" name="title3" value="{{ images.2.title }}" class="title-input" style="display: none;">
+                    
+                    <p id="description3" class="image-description">{{ images.2.description }}</p>
+                    <textarea name="description3" class="description-input" style="display: none;">{{ images.2.description }}</textarea>
+                    
+                    {% if images.2.image %}
+                        <img id="image3" src="{{ images.2.image.url }}" alt="Image 3" style="width: 100px; height: auto; margin-top: 10px;">
+                    {% else %}
+                        <p>No Image Available</p>
+                    {% endif %}
+                    
+                    <label for="file3" class="choose-file-button" style="display: none;">Choose File</label>
+                    <input type="file" id="file3" name="file3" class="file-input" accept="image/*" style="display: none;" onchange="showSaveButton(3); previewImage(3)">
+                    
+                    <button class="edit-button" type="button" onclick="toggleEdit(3)">Edit</button>
+                    <button type="submit" class="save-button" style="display: none;">Save</button>
+                    <button type="button" class="delete-button" onclick="resetImage(3)" style="display: none;">Cancel</button>
+                </form>
+            </div>
+
+            <!-- Repeat for Card 4 -->
+            <div class="image-item">
+                <form id="form4" action="{% url 'admin_homepage_edit' %}" method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    
+                    <h3 id="title4" class="image-title">{{ images.3.title }}</h3>
+                    <input type="text" name="title4" value="{{ images.3.title }}" class="title-input" style="display: none;">
+                    
+                    <p id="description4" class="image-description">{{ images.3.description }}</p>
+                    <textarea name="description4" class="description-input" style="display: none;">{{ images.3.description }}</textarea>
+                    
+                    {% if images.3.image %}
+                        <img id="image4" src="{{ images.3.image.url }}" alt="Image 4" style="width: 100px; height: auto; margin-top: 10px;">
+                    {% else %}
+                        <p>No Image Available</p>
+                    {% endif %}
+                    
+                    <label for="file4" class="choose-file-button" style="display: none;">Choose File</label>
+                    <input type="file" id="file4" name="file4" class="file-input" accept="image/*" style="display: none;" onchange="showSaveButton(4); previewImage(4)">
+                    
+                    <button class="edit-button" type="button" onclick="toggleEdit(4)">Edit</button>
+                    <button type="submit" class="save-button" style="display: none;">Save</button>
+                    <button type="button" class="delete-button" onclick="resetImage(4)" style="display: none;">Cancel</button>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script>
+    function toggleEdit(id) {
+        const title = document.getElementById(`title${id}`);
+        const description = document.getElementById(`description${id}`);
+        const titleInput = document.querySelector(`#form${id} .title-input`);
+        const descriptionInput = document.querySelector(`#form${id} .description-input`);
+        const chooseFileButton = document.querySelector(`#form${id} .choose-file-button`);
+        const editButton = document.querySelector(`#form${id} .edit-button`);
+        const saveButton = document.querySelector(`#form${id} .save-button`);
+        const cancelButton = document.querySelector(`#form${id} .delete-button`);
+        
+        title.style.display = 'none';
+        description.style.display = 'none';
+        titleInput.style.display = 'block';
+        descriptionInput.style.display = 'block';
+        chooseFileButton.style.display = "inline-block";
+        editButton.style.display = "none";
+        saveButton.style.display = "inline-block";
+        cancelButton.style.display = "inline-block";
+        cancelButton.disabled = false;
+    }
+
+    function showSaveButton(id) {
+        document.querySelector(`#form${id} .save-button`).style.display = "inline-block";
+    }
+
+    function resetImage(id) {
+        document.getElementById(`title${id}`).style.display = 'block';
+        document.getElementById(`description${id}`).style.display = 'block';
+        document.querySelector(`#form${id} .title-input`).style.display = 'none';
+        document.querySelector(`#form${id} .description-input`).style.display = 'none';
+        document.querySelector(`#form${id} .edit-button`).style.display = "inline-block";
+        document.querySelector(`#form${id} .choose-file-button`).style.display = "none";
+        document.querySelector(`#form${id} .save-button`).style.display = "none";
+        document.querySelector(`#form${id} .delete-button`).style.display = "none";
+    }
+
+    function previewImage(id) {
+        const fileInput = document.getElementById(`file${id}`);
+        let img = document.getElementById(`image${id}`);
+        const file = fileInput.files[0];
+
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                if (!img) {
+                    img = document.createElement('img');
+                    img.id = `image${id}`;
+                    img.style.width = "100px";
+                    img.style.height = "auto";
+                    img.style.marginTop = "10px";
+                    fileInput.parentNode.insertBefore(img, fileInput);
+                }
+                img.src = e.target.result;
+                img.style.display = "block";
+            };
+            reader.readAsDataURL(file);
+        } else {
+            if (img) {
+                img.src = "";
+                img.style.display = "none";
+            }
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const forms = document.querySelectorAll('.image-item form');
+
+        forms.forEach(form => {
+            form.addEventListener('submit', function (e) {
+                e.preventDefault();
+
+                const formData = new FormData(this);
+                const actionUrl = this.getAttribute('action');
+
+                fetch(actionUrl, {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest',
+                    },
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.status === 'success') {
+                            alert(data.message.join('\n'));
+                            location.reload();
+                        } else if (data.status === 'info') {
+                            alert(data.message);
+                        } else {
+                            alert('An error occurred. Please try again.');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('An unexpected error occurred.');
+                    });
+            });
+        });
+    });
+</script>
+
+{% endblock %}

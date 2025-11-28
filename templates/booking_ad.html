@@ -1,0 +1,206 @@
+{% extends 'nav_ad.html' %}
+{% load static %}
+
+{% block title %}
+    Additional Facilities - JSX Hotel
+{% endblock %}
+
+{% block content %}
+
+<link rel="stylesheet" href="{% static 'css/booking_ad.css' %}">
+
+<!-- Flex container for the two-column layout -->
+<div class="flex-container">
+    <!-- Left Side: Rooms Container -->
+    <div class="rooms-container">
+        {% include 'rooms.html' %}
+    </div>
+    
+
+    <!-- Right Side: Room Expansion Section -->
+    <div class="room-expansion-section">
+        <button onclick="addRoomPromotion()" class="main-button">Add Room Expansion</button>
+        <button type="button" onclick="deactivateSelectedRoom()" class="deact">Deactivate Selected Room</button>
+        
+        <!-- Container for dynamically added promotions -->
+        <div id="promotion-container"></div>
+
+        
+        <!-- Hidden form template for cloning -->
+        <div id="promotion-template" style="display: none;">
+            <form action="{% url 'room_promotions_view' %}" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div>
+                    <label for="room_name">Room Name:</label>
+                    <input type="text" name="room_name" required>
+                </div>
+
+                <div>
+                    <label for="price">Price:</label>
+                    <input type="number" name="price" required min="0" step="0.01" oninput="validateNumberInput(this)">
+                </div>
+                
+                <div>
+                    <label for="description">Description:</label>
+                    <textarea name="description" rows="3"></textarea>
+                </div>
+                <div>
+                    <label for="image">Image:</label>
+                    <input type="file" name="image" accept="image/*">
+                    <img src="" alt="Image Preview" style="max-width: 100px; display: none;">
+                </div>
+                <!-- Remove Button -->
+                <button type="button" class="remove-button" onclick="removeRoomPromotion(this)">Remove</button>
+                <button type="submit">Save</button>
+            </form>
+            
+        </div>
+    </div>
+</div>
+
+
+<!-- JavaScript for Dynamic Room Promotion Forms -->
+<script>
+    let promotionCount = 0;
+
+    // Function to dynamically add a new room promotion form
+    function addRoomPromotion() {
+        const container = document.getElementById('promotion-container');
+        const template = document.getElementById('promotion-template').cloneNode(true);
+        template.style.display = 'block';
+        template.removeAttribute('id');
+
+        // Elements within the cloned template
+        const imageInput = template.querySelector('input[type="file"]');
+        const imgPreview = template.querySelector('img');
+        const titleInput = template.querySelector('input[name="room_name"]');
+        const priceInput = template.querySelector('input[name="price"]'); // Price input field
+        const descriptionInput = template.querySelector('textarea[name="description"]');
+        const submitButton = template.querySelector('button[type="submit"]');
+
+        // Preview image on file input change
+        imageInput.addEventListener('change', function () {
+            const file = this.files[0];
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                imgPreview.src = e.target.result;
+                imgPreview.style.display = 'block';
+            };
+            if (file) {
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Form submission validation and submission
+        submitButton.addEventListener('click', function (e) {
+            e.preventDefault();
+
+            // Validate fields
+            if (!titleInput.value.trim()) {
+                alert('Please enter a room title.');
+                return;
+            }
+
+            if (!priceInput.value.trim()) {
+                alert('Please enter a valid price.');
+                return;
+            }
+
+            // Check for special characters or non-numeric input in price
+            if (/[^0-9.]/.test(priceInput.value)) {
+                alert('The price must only contain numeric values and a decimal point. Special characters, letters, or commas are not allowed.');
+                return;
+            }
+
+            if (parseFloat(priceInput.value) <= 0) {
+                alert('Please enter a price greater than 0.');
+                return;
+            }
+
+            if (parseFloat(priceInput.value) > 99999999) {
+                alert('The price must not exceed 8 digits.');
+                return;
+            }
+
+            if (!descriptionInput.value.trim()) {
+                alert('Please enter a room description.');
+                return;
+            }
+
+            if (!imageInput.files || imageInput.files.length === 0) {
+                alert('Please select an image.');
+                return;
+            }
+
+            // Prepare form data
+            const formData = new FormData(template.querySelector('form'));
+
+            // Submit the form via Fetch API
+            fetch('{% url "room_promotions_view" %}', {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}',
+                },
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert(data.message); // Success message
+                        location.reload(); // Reload the page to reflect changes
+                    } else {
+                        alert(data.message); // Error message from server
+                    }
+                })
+                .catch(error => {
+                    alert('An unexpected error occurred: ' + error.message);
+                });
+        });
+
+        // Append the completed form template to the container
+        container.appendChild(template);
+    }
+
+    // Function to remove a room promotion form
+    function removeRoomPromotion(button) {
+        const form = button.closest('form');
+        form.remove(); // Remove the form element
+    }
+
+    // Function to deactivate a promotion
+    function deactivateSelectedRoom() {
+        // Get the selected room
+        const selectedRoom = document.querySelector('input[name="room"]:checked');
+        
+        if (!selectedRoom) {
+            alert('Please select a room to deactivate.');
+            return;
+        }
+        
+        const roomId = selectedRoom.value;
+    
+        // Make a POST request to deactivate the selected room
+        fetch(`/deactivate_promotion/${roomId}/`, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}',
+                'Content-Type': 'application/json',
+            },
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert(data.message);
+                    location.reload(); // Reload the page to reflect changes
+                } else {
+                    alert(data.message);
+                }
+            })
+            .catch(error => {
+                alert('An error occurred while deactivating the room: ' + error.message);
+            });
+    }
+</script>
+
+
+{% endblock %}

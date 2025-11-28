@@ -1,0 +1,213 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/ionicons@4.5.10-0/dist/css/ionicons.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap">
+    <title>{% block title %}Rooms{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/rooms.css' %}">
+</head>
+<body>
+    <div class="page-container">
+        <main>
+            <article>
+                <h2 class="center-title">Please Select Your Room</h2>
+            </article>
+            <div class="spacer"></div>
+            
+        <div class="room-container_gst">
+            <!-- Room 1 -->
+            <label class="room_gst">
+                <div class="radio-image-container">
+                    <input type="radio" name="room" value="room1" class="room-radio" required>
+                    <img src="{% static 'images/1.jpg' %}" alt="Room 1" class="room-image">
+                </div>
+                <div class="room-details">
+                    <div class="room-description_gst">
+                        <p><i class="icon ion-md-bed"></i> Select Room 1</p>
+                        <span class="price">
+                            <i class="icon ion-md-cash"></i> 5,500.00
+                        </span>
+                        <p><i class="icon ion-md-information-circle-outline"></i> Spacious and modern design with city view.</p>
+                    </div>
+                    <div class="room-features">
+                        <p><i class="icon ion-md-checkmark-circle"></i> Free Wi-Fi</p>
+                        <p><i class="icon ion-md-snow"></i> Air Conditioning</p>
+                        <p><i class="icon ion-md-tv"></i> Flat-screen TV</p>
+                    </div>
+                </div>
+            </label>
+            
+            <!-- Room 2 -->
+            <label class="room_gst">
+                <div class="radio-image-container">
+                    <input type="radio" name="room" value="room2" class="room-radio" required>
+                    <img src="{% static 'images/2.jpg' %}" alt="Room 2" class="room-image">
+                </div>
+                <div class="room-details">
+                    <div class="room-description_gst">
+                        <p><i class="icon ion-md-bed"></i> Select Room 2</p>
+                        <span class="price">
+                            <i class="icon ion-md-cash"></i> 6,500.00
+                        </span>
+                        <p><i class="icon ion-md-information-circle-outline"></i> Spacious Comfortable and cozy with a garden view.</p>
+                    </div>
+                    <div class="room-features">
+                        <p><i class="icon ion-md-checkmark-circle"></i> Free Wi-Fi</p>
+                        <p><i class="icon ion-md-snow"></i> Air Conditioning</p>
+                        <p><i class="icon ion-md-tv"></i> Flat-screen TV</p>
+                    </div>
+                </div>
+            </label>
+            
+            <!-- Room 3 -->
+            <label class="room_gst">
+                <div class="radio-image-container">
+                    <input type="radio" name="room" value="room3" class="room-radio" required>
+                    <img src="{% static 'images/3.jpg' %}" alt="Room 3" class="room-image">
+                </div>
+                <div class="room-details">
+                    <div class="room-description_gst">
+                        <p><i class="icon ion-md-bed"></i> Select Room 3</p>
+                        <span class="price">
+                            <i class="icon ion-md-cash"></i> 7,700.00
+                        </span>
+                        <p><i class="icon ion-md-information-circle-outline"></i> Elegant and spacious suite with city skyline.</p>
+                    </div>
+                    <div class="room-features">
+                        <p><i class="icon ion-md-checkmark-circle"></i> Free Wi-Fi</p>
+                        <p><i class="icon ion-md-snow"></i> Air Conditioning</p>
+                        <p><i class="icon ion-md-tv"></i> Flat-screen TV</p>
+                    </div>
+                </div>
+            </label>
+            
+            <!-- Room 4 -->
+            <label class="room_gst">
+                <div class="radio-image-container">
+                    <input type="radio" name="room" value="room4" class="room-radio" required>
+                    <img src="{% static 'images/4.jpg' %}" alt="Room 4" class="room-image">
+                </div>
+                <div class="room-details">
+                    <div class="room-description_gst">
+                        <p><i class="icon ion-md-bed"></i> Select Room 4</p>
+                        <span class="price">
+                            <i class="icon ion-md-cash"></i> 8,500.00
+                        </span>
+                        <p><i class="icon ion-md-information-circle-outline"></i> Cozy room with a garden view and natural lighting.</p>
+                    </div>
+                    <div class="room-features">
+                        <p><i class="icon ion-md-checkmark-circle"></i> Free Wi-Fi</p>
+                        <p><i class="icon ion-md-snow"></i> Air Conditioning</p>
+                        <p><i class="icon ion-md-tv"></i> Flat-screen TV</p>
+                    </div>
+                </div>
+            </label>
+            
+            <!-- Room 5 -->
+            <label class="room_gst">
+                <div class="radio-image-container">
+                    <input type="radio" name="room" value="room5" class="room-radio" required>
+                    <img src="{% static 'images/5.jpg' %}" alt="Room 5" class="room-image">
+                </div>
+                <div class="room-details">
+                    <div class="room-description_gst">
+                        <p><i class="icon ion-md-bed"></i> Select Room 5</p>
+                        <span class="price">
+                            <i class="icon ion-md-cash"></i> 9,000.00
+                        </span>
+                        <p><i class="icon ion-md-information-circle-outline"></i> Luxurious room with ocean view and balcony access.</p>
+                    </div>
+                    <div class="room-features">
+                        <p><i class="icon ion-md-checkmark-circle"></i> Free Wi-Fi</p>
+                        <p><i class="icon ion-md-snow"></i> Air Conditioning</p>
+                        <p><i class="icon ion-md-tv"></i> Flat-screen TV</p>
+                    </div>
+                </div>
+            </label>
+
+            {% for promotion in promotions %}
+                <label class="room_gst">
+                    <div class="radio-image-container">
+                        <input type="radio" name="room" value="{{ promotion.room_name }}" class="room-radio" required>
+                        {% if promotion.image %}
+                            <img src="{{ promotion.image.url }}" alt="{{ promotion.room_name }}" class="room-image">
+                        {% else %}
+                            <img src="{% static 'images/placeholder.png' %}" alt="No Image Available" class="room-image">
+                        {% endif %}
+                    </div>
+
+                    <div class="room-details">
+                        <div class="room-description_gst">
+                            <p><i class="icon ion-md-bed"></i> Select {{ promotion.room_name }}</p>
+                            <span class="price">
+                                <i class="icon ion-md-cash"></i> {{ promotion.price|floatformat:2 }}
+                            </span>
+                            <p><i class="icon ion-md-information-circle-outline"></i> {{ promotion.description }}</p>
+                        </div>
+                        <div class="room-features">
+                            <p><i class="icon ion-md-checkmark-circle"></i> Free Wi-Fi</p>
+                            <p><i class="icon ion-md-snow"></i> Air Conditioning</p>
+                            <p><i class="icon ion-md-tv"></i> Flat-screen TV</p>
+                        </div>
+                    </div>
+                    {% if is_admin %}
+                        <button type="button" onclick="deactivatePromotion({{ promotion.id }})" class="deactivate-button">
+                            Deactivate
+                        </button>
+                    {% endif %}
+                </label>
+            {% empty %}
+                <p>No active promotions are available at the moment.</p>
+            {% endfor %}
+            </div>
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const roomLabels = document.querySelectorAll('.room_gst');
+            roomLabels.forEach(label => {
+                label.addEventListener('click', function() {
+                    roomLabels.forEach(l => l.classList.remove('selected'));
+                    this.classList.add('selected');
+                });
+            });
+        });
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const roomContainers = document.querySelectorAll('.room_gst');
+            roomContainers.forEach(container => {
+                let hoverTimeout;
+                container.addEventListener('mouseenter', () => {
+                    hoverTimeout = setTimeout(() => {
+                        container.classList.add('hover-delay');
+                    }, 3000); // 3-second delay before expanding
+                });
+
+                container.addEventListener('mouseleave', () => {
+                    clearTimeout(hoverTimeout);
+                    container.classList.remove('hover-delay');
+                });
+            });
+        });
+
+        document.addEventListener("DOMContentLoaded", function() {
+            let lastScrollTop = 0;
+            const centerTitle = document.querySelector('.center-title');
+            window.addEventListener('scroll', function() {
+                const currentScroll = window.scrollY;
+                if (currentScroll > lastScrollTop && currentScroll > 50) {
+                    centerTitle.style.opacity = '0';
+                } else {
+                    centerTitle.style.opacity = '1';
+                }
+                lastScrollTop = currentScroll <= 0 ? 0 : currentScroll;
+            });
+        });
+    </script>
+</body>
+</html>

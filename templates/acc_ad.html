@@ -1,0 +1,244 @@
+{% extends 'nav_ad.html' %}
+{% load static %}
+{% block title %}
+    Creating Account - JSX Hotel
+{% endblock %}
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/acc_ad.css' %}">
+<div class="account-management-container">
+    <table class="account-table">
+        <tr>
+            <!-- Create Account Form -->
+            <td class="create-account-form-container">
+                <h2>Create an Account for Hotel Receptionist</h2>
+                <form id="createAccountForm" method="POST" action="{% url 'manage_hr_accounts' %}" class="create-account-form">
+                    {% csrf_token %}
+                    <input type="text" id="username" name="username" placeholder="Username" required autocomplete="username"><br><br>
+                    
+                    <div class="password-wrapper">
+                        <input type="password" class="input-field" id="passwordInput" name="password" placeholder="Password" required>
+                        <i class="fas fa-eye toggle-password"></i>
+                    </div>
+                    
+                    <div class="password-wrapper">
+                        <input type="password" class="input-field" id="confirmpassword" name="confirmpassword" placeholder="Confirm Password" required>
+                        <i class="fas fa-eye toggle-password"></i>
+                    </div> <br> <br>
+
+                    <input type="submit" value="Create Account" class="submit-button">
+                </form>
+            </td>
+
+            <!-- List of Active Accounts -->
+            <td class="archive-section">
+                <button onclick="toggleAccountList()" class="archive-toggle-button">List of Accounts</button>
+
+                <!-- Search Input and Accounts Table -->
+                <div class="archive-table-wrapper" id="archiveTable" style="display: none;">
+                    <input type="text" id="accountSearch" placeholder="Search accounts..." class="account-search-input" onkeyup="searchAccounts()">
+                    <div class="table-scroll-wrapper"> <!-- Scrollable container -->
+                        <table class="archive-table">
+                            <tr>
+                                <th>Account Name</th>
+                                <th>Status [Click to Deactivate]</th>
+                            </tr>
+                            <tbody id="accountTableBody">
+                                {% for account in accounts %}
+                                    <tr>
+                                        <td>{{ account.username }}</td>
+                                        <td>
+                                            <button onclick="toggleStatus(this, '{{ account.username }}')" 
+                                                    class="status-button" 
+                                                    data-status="{{ account.hraccount_status }}">
+                                                {{ account.hraccount_status }}
+                                            </button>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<script>
+
+    document.addEventListener('DOMContentLoaded', () => {
+        // Function to initialize the show password functionality
+        const addPasswordToggle = (wrapper) => {
+            const passwordInput = wrapper.querySelector('.input-field[type="password"]');
+            const togglePassword = wrapper.querySelector('.toggle-password');
+    
+            // Show the toggle icon when typing starts
+            passwordInput.addEventListener('input', () => {
+                if (passwordInput.value.length > 0) {
+                    togglePassword.style.display = 'inline'; // Show the icon
+                } else {
+                    togglePassword.style.display = 'none'; // Hide the icon
+                }
+            });
+    
+            // Add click event to toggle password visibility
+            togglePassword.addEventListener('click', () => {
+                if (passwordInput.type === 'password') {
+                    passwordInput.type = 'text'; // Show password
+                } else {
+                    passwordInput.type = 'password'; // Hide password
+                }
+    
+                // Toggle icon class between 'fa-eye' and 'fa-eye-slash'
+                togglePassword.classList.toggle('fa-eye');
+                togglePassword.classList.toggle('fa-eye-slash');
+            });
+    
+            // Initially hide the toggle-password icon
+            togglePassword.style.display = 'none';
+        };
+    
+        // Apply the functionality to all password wrappers
+        document.querySelectorAll('.password-wrapper').forEach(addPasswordToggle);
+    });
+    
+
+    document.getElementById('createAccountForm').addEventListener('submit', function(event) {
+        event.preventDefault(); // Prevent the default form submission
+
+        const formData = new FormData(this);
+
+        fetch('{% url "manage_hr_accounts" %}', {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest',
+                'X-CSRFToken': getCSRFToken()
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Response Data:', data);
+            if (data.success) {
+                alert(data.message || 'Operation completed successfully.'); 
+                location.reload();
+            } else {
+                alert(data.message || 'An error occurred. Please try again.');
+            }
+        })
+        .catch(error => {
+            alert('An unexpected error occurred: ' + error.message);
+        });
+    });
+
+    function getCSRFToken() {
+        let cookieValue = null;
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.startsWith('csrftoken=')) {
+                cookieValue = cookie.substring('csrftoken='.length, cookie.length);
+                break;
+            }
+        }
+        return cookieValue;
+    }
+
+    function toggleAccountList() {
+        var archive = document.getElementById('archiveTable');
+        archive.style.display = (archive.style.display === 'none' || archive.style.display === '') ? 'block' : 'none';
+    }
+
+    function searchAccounts() {
+        const input = document.getElementById('accountSearch').value.toLowerCase();
+        const rows = document.querySelectorAll('.archive-table tr');
+        rows.forEach((row, index) => {
+            if (index === 0) return; // Skip the header row
+            const accountName = row.cells[0].textContent.toLowerCase();
+            row.style.display = accountName.includes(input) ? '' : 'none';
+        });
+    }
+
+    function toggleStatus(button, username) {
+        const currentStatus = button.getAttribute('data-status');
+
+        if (currentStatus === 'ACTIVE') {
+            const confirmDeactivation = confirm(`Are you sure you want to deactivate the account ${username}? Once deactivated, this account cannot be reactivated.`);
+
+            if (!confirmDeactivation) {
+                return;
+            }
+
+            const newStatus = 'DEACTIVATED';
+
+            fetch(`/update_hr_status/${username}/`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCSRFToken(),
+                },
+                body: JSON.stringify({ status: newStatus }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    button.innerHTML = newStatus;
+                    button.setAttribute('data-status', newStatus);
+                    button.style.backgroundColor = 'grey';
+                    button.style.color = 'white';
+                    button.style.cursor = 'not-allowed';
+                    button.style.pointerEvents = 'none';
+
+                    fetchAccounts();
+                } else {
+                    alert('Failed to update account status: ' + data.error);
+                }
+            })
+            .catch(error => alert('Error: ' + error.message));
+        } else {
+            alert("This account is already deactivated and cannot be reactivated.");
+        }
+    }
+
+    function fetchAccounts() {
+        fetch('{% url "manage_hr_accounts" %}', {
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            const accounts = JSON.parse(data.accounts);
+            updateAccountTable(accounts);
+        })
+        .catch(error => alert('Error fetching accounts: ' + error.message));
+    }
+
+    function updateAccountTable(accounts) {
+        const accountTableBody = document.getElementById('accountTableBody');
+        accountTableBody.innerHTML = ''; // Clear existing table rows
+
+        accounts.forEach(account => {
+            const fields = account.fields;
+            const newRow = document.createElement('tr');
+
+            newRow.innerHTML = `
+                <td>${fields.username || account.pk || 'N/A'}</td>
+                <td>
+                    <button onclick="toggleStatus(this, '${fields.username || account.pk}')" 
+                            class="status-button" 
+                            data-status="${fields.hraccount_status}">
+                        ${fields.hraccount_status}
+                    </button>
+                </td>
+            `;
+            accountTableBody.appendChild(newRow);
+        });
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        fetchAccounts();
+        setInterval(fetchAccounts, 10000); // Refresh every 10 seconds
+    });
+</script>
+{% endblock %}

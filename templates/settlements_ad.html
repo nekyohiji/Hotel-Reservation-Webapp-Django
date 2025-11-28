@@ -1,0 +1,112 @@
+{% extends 'nav_ad.html' %}
+{% load static %}
+{% block title %}
+    Reservations - JSX Hotel
+{% endblock %}
+{% block content %}
+<main>
+    <link rel="stylesheet" href="{% static 'css/settlements.css' %}">
+    
+    <body>
+        <div id="reservations">
+            <h2>List of Guests - Overstaying</h2>
+            <table id="rsv_req_ad">
+                <thead> 
+                    <tr>
+                        <th>Reference ID</th>
+                        <th>Guest Name</th>
+                        <th>Check-in</th>
+                        <th>Check-out</th> 
+                        <th>Room Type</th>
+                        <th>Type of Booking</th>
+                        <th>Status</th>
+                        <th>Settlements</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for reservation in reservations %}
+                    <tr>
+                        <td>{{ reservation.reference_id }}</td>
+                        <td>{{ reservation.firstname }} {{ reservation.lastname }}</td>
+                        <td>{{ reservation.check_in }}</td>
+                        <td>{{ reservation.check_out }}</td>
+                        <td>{{ reservation.room_type }}</td>
+                        <td>{{ reservation.typeofbooking }}</td>
+                        <td>{{ reservation.status }}</td>
+                        <td>
+                            <form method="post" action="{% url 'update_settlement' reservation.reference_id %}">
+                                {% csrf_token %}
+                                <select name="settlements" class="settlements-select" data-url="{% url 'update_settlement' reservation.reference_id %}">
+                                    <option value="">Select</option>
+                                    <option value="Settled" {% if reservation.settlements == "Settled" %}selected{% endif %}>Settled</option>
+                                    <option value="Blocklisted" {% if reservation.settlements == "Blocklisted" %}selected{% endif %}>Blocklisted</option>
+                                </select>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <br>
+        </div>
+        <div id="loadingOverlay" class="loading-overlay">
+            <div class="spinner"></div>
+        </div>
+    </body>
+</main>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    const loadingOverlay = document.getElementById("loadingOverlay");
+
+    // Handle change event for settlement status
+    document.querySelectorAll(".settlements-select").forEach((select) => {
+        select.addEventListener("change", async (event) => {
+            const url = select.dataset.url; // Get the form's URL dynamically
+            const settlementStatus = select.value; // Get the selected value
+            const csrfToken = document.querySelector('[name="csrfmiddlewaretoken"]').value; // CSRF Token
+
+            // Validate input
+            if (!settlementStatus) {
+                alert("Please select a valid settlement status.");
+                return;
+            }
+
+            // Show loading spinner
+            loadingOverlay.style.display = "flex";
+
+            try {
+                const response = await fetch(url, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-CSRFToken": csrfToken,
+                    },
+                    body: JSON.stringify({ settlements: settlementStatus }),
+                });
+
+                const result = await response.json();
+
+                // Hide spinner after response
+                loadingOverlay.style.display = "none";
+
+                if (result.success) {
+                    alert(result.message); // Show success message
+                } else {
+                    alert(`Error: ${result.message}`); // Show error message
+                }
+
+                // Reload the table to reflect updated data (optional)
+                window.location.reload();
+            } catch (error) {
+                // Hide spinner if an error occurs
+                loadingOverlay.style.display = "none";
+                alert("An unexpected error occurred. Please try again.");
+                console.error(error);
+            }
+        });
+    });
+});
+</script>
+
+{% endblock %}

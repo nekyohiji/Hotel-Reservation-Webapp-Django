@@ -1,0 +1,159 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Admin{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/sidebar.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <!-- Admin Sidebar -->
+    <nav class="admin-sidebar">
+        <!-- Sidebar Header/Logo -->
+        <div class="admin-sidebar-header">
+            <img src="{% static 'images/logo.png' %}" alt="Logo" class="admin-logo">
+        </div>
+     
+
+        <!-- Sidebar Links -->
+        <ul class="admin-sidebar-list">
+            <li class="admin-sidebar-item" id="home">
+                <a href="{% url 'home_ad' %}" class="admin-sidebar-link">
+                    <span class="admin-icon"><i class="fas fa-home"></i></span>
+                    <span class="admin-text">Home</span>
+                </a>
+            </li>
+            <li class="admin-sidebar-item" id="additional-facilities">
+                <a href="{% url 'booking_ad_view' %}" class="admin-sidebar-link">
+                    <span class="admin-icon"><i class="fas fa-box"></i></span>
+                    <span class="admin-text">Additional Facilities</span>
+                </a>
+            </li>
+            <li class="admin-sidebar-item" id="reservation-request">
+                <a href="{% url 'admin_reservations' %}" class="admin-sidebar-link">
+                    <span class="admin-icon"><i class="fas fa-calendar-check"></i></span>
+                    <span class="admin-text">Reservation Request</span>
+                </a>
+            </li>
+            <li class="admin-sidebar-item" id="cancellation-request">
+                <a href="{% url 'cncl_req_ad' %}" class="admin-sidebar-link">
+                    <span class="admin-icon"><i class="fas fa-times-circle"></i></span>
+                    <span class="admin-text">Cancellation Request</span>
+                </a>
+            </li>
+            <li class="admin-sidebar-item" id="settlements">
+                <a href="{% url 'settlements_ad' %}" class="admin-sidebar-link">
+                    <span class="admin-icon"><i class="fas fa-credit-card"></i></span>
+                    <span class="admin-text">Settlements</span>
+                </a>
+            </li>
+            <li class="admin-sidebar-item" id="accounts">
+                <a href="{% url 'acc_ad' %}" class="admin-sidebar-link">
+                    <span class="admin-icon"><i class="fas fa-user-circle"></i></span>
+                    <span class="admin-text">HR Accounts</span>
+                </a>
+            </li>
+            <li class="admin-sidebar-item" id="archives">
+                <a href="{% url 'archived_bookings' %}" class="admin-sidebar-link">
+                    <span class="admin-icon"><i class="fas fa-archive"></i></span>
+                    <span class="admin-text">Archives</span>
+                </a>
+            </li>
+        </ul>
+
+        <!-- Admin Logout Button -->
+        <a href="{% url 'logout' %}" class="admin-logout-btn" onclick="return confirm('Are you sure you want to log out?');">
+            <span class="admin-icon"><i class="fas fa-sign-out-alt"></i></span>
+        </a>
+    </nav>
+
+    <!-- Burger Menu Icon (Visible on Mobile) -->
+    <button id="burger-menu" class="burger-menu">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <!-- Dropdown Menu for Collapsed Sidebar -->
+    <div id="dropdown-menu" class="dropdown-menu">
+        <ul class="dropdown-list">
+            <li><a href="{% url 'home_ad' %}">Home</a></li>
+            <li><a href="{% url 'booking_ad_view' %}">Additional Facilities</a></li>
+            <li><a href="{% url 'admin_reservations' %}">Reservation Request</a></li>
+            <li><a href="{% url 'cncl_req_ad' %}">Cancellation Request</a></li>
+            <li><a href="{% url 'settlements_ad' %}">Settlements</a></li>
+            <li><a href="{% url 'acc_ad' %}">Accounts</a></li>
+            <li><a href="{% url 'archived_bookings' %}">Archives</a></li>
+            <li><a href="{% url 'logreg' %}">Logout</a></li>
+        </ul>
+    </div>
+
+    <!-- Main Content Area -->
+    <div class="admin-main-content">
+        {% block content %}
+
+        {% endblock %}
+    </div>
+
+    <!-- JavaScript for Burger Menu and Dropdown, Active State -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const burgerMenu = document.getElementById('burger-menu');
+            const dropdownMenu = document.getElementById('dropdown-menu');
+            const navLinks = document.querySelectorAll('.dropdown-list a');
+            const sidebarItems = document.querySelectorAll(".admin-sidebar-item");
+
+            // Function to toggle the dropdown menu visibility
+            const toggleDropdown = () => {
+                dropdownMenu.style.display = dropdownMenu.style.display === 'block' ? 'none' : 'block';
+            };
+
+            // Toggle dropdown menu when the burger menu is clicked
+            burgerMenu.addEventListener('click', toggleDropdown);
+
+            // Close dropdown menu when clicking outside of it
+            document.addEventListener('click', function (event) {
+                if (!burgerMenu.contains(event.target) && !dropdownMenu.contains(event.target)) {
+                    dropdownMenu.style.display = 'none';
+                }
+            });
+
+            // Close the dropdown menu when a navigation link is clicked
+            navLinks.forEach(link => {
+                link.addEventListener('click', function () {
+                    dropdownMenu.style.display = 'none';
+                });
+            });
+
+            // Handle window resize to close the dropdown on larger screens
+            window.addEventListener('resize', function () {
+                if (window.innerWidth > 768) {
+                    dropdownMenu.style.display = 'none';
+                }
+            });
+
+            // Ensure the dropdown menu is hidden initially
+            window.addEventListener('load', function () {
+                dropdownMenu.style.display = 'none';
+            });
+
+
+
+            
+
+            // Active sidebar item on click
+            sidebarItems.forEach(item => {
+                item.addEventListener("click", function () {
+                    // Remove active class from all items
+                    sidebarItems.forEach(i => i.classList.remove("admin-active"));
+
+                    // Add active class to clicked item
+                    this.classList.add("admin-active");
+                });
+            });
+        });
+
+        
+    </script>
+</body>
+</html>
