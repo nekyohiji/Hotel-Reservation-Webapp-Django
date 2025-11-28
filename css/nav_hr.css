@@ -1,0 +1,170 @@
+/* Body Background */
+body {
+    background-color: #0d0d0d;
+    color: #e0e0e0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Black Sticky Navbar with Glassmorphism Effect */
+.navbar {
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+}
+
+/* Navbar Brand (Logo and Hotel Name) */
+.navbar-brand img {
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.navbar-brand {
+    color: #e0e0e0;
+    font-weight: 700;
+    font-size: 1.2rem;
+}
+
+/* Navbar Links */
+.nav-link {
+    color: #b0b0b0;
+    font-weight: 500;
+    transition: color 0.3s ease, transform 0.2s ease;
+}
+
+
+.nav-link:hover {
+    color:#e4ce50b0;
+    transform: scale(1.05);
+}
+
+/* Real-Time Clock */
+#clock {
+    font-size: 1.2rem;
+    color: #e0e0e0;
+}
+
+/* Notification Icon and Badge */
+.bi-bell {
+    color: #e0e0e0;
+    transition: color 0.2s ease;
+}
+
+.bi-bell:hover {
+    color: #ff6b6b; /* Accent color for hover */
+}
+
+.badge {
+    background-color: #ff6b6b;
+    color: #fff;
+    font-size: 0.75rem;
+    padding: 0.2rem 0.4rem;
+    border-radius: 50%;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+/* Glassmorphism Effect for Content Sections */
+.glassy-content {
+    background: rgba(25, 25, 25, 0.85);
+    backdrop-filter: blur(15px);
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+}
+
+/* Card Styles (Optional for Dashboard Cards) */
+.info-card {
+    background: rgba(30, 30, 30, 0.85);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(15px);
+    color: #e0e0e0;
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4);
+}
+
+/* Navbar Toggler Icon */
+.navbar-toggler-icon {
+    filter: invert(1);
+}
+
+/* Hover Effect for Active Links */
+.nav-link.active {
+    color:#605b3eb0;
+    font-weight: 700;
+    border-bottom: 2px solid#605b3eb0;
+}
+
+/* Smooth Transitions */
+* {
+    transition: all 0.2s ease-in-out;
+}
+
+
+span {
+    font-family: 'Playfair Display', 'Dancing Script', 'Great Vibes', 'Cinzel', 'Merriweather', serif;
+    color: rgb(227, 204, 91);
+    background: linear-gradient(to right, #ffffff, #e3cc5b, #ffffff, #e3cc5b);
+    background-size: 200%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    letter-spacing: 5px;
+    animation: gradientMove 4s ease-in-out infinite alternate;
+}
+
+@keyframes gradientMove {
+    0% {
+        background-position: 0%;
+    }
+    100% {
+        background-position: 100%;
+    }
+}
+
+
+/*MODAL LOGOUT*/
+/* Glassy Modal Styles */
+.glassy-modal {
+    background: rgba(20, 20, 20, 0.9);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+    color: #e0e0e0;
+}
+
+/* Modal Icon Styles */
+.modal-title i {
+    font-size: 1.5rem;
+}
+
+/* Button Styles */
+.btn-secondary {
+    background-color: #333;
+    border: none;
+    color: #e0e0e0;
+    transition: background-color 0.2s ease;
+}
+
+.btn-secondary:hover {
+    background-color: #555;
+}
+
+.btn-danger {
+    background-color: #ff6b6b;
+    border: none;
+}
+
+.btn-danger:hover {
+    background-color: #ff4c4c;
+}
+
+/* Close Button (White) */
+.btn-close-white {
+    filter: invert(1);
+}
+
+
+.modal-footer .btn {
+    width: 45%;
+}

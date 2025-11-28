@@ -1,0 +1,241 @@
+/* General Styles */
+body {
+    margin: 0;
+    font-family: 'Merriweather', sans-serif;
+    background-color: #f4f4f9;
+}
+
+/* Navbar Styles */
+.navbar {
+    position: fixed; /* Makes the navbar fixed */
+    top: 0; /* Fix it to the top of the page */
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: rgb(0, 0, 0);
+    z-index: 100; /* Ensures the navbar stays on top of other elements */
+}
+
+
+
+.navbar-left {
+    display: flex;
+    align-items: center;
+}
+
+.navbar-right {
+    display: flex;
+    align-items: center;
+    margin-right: 20px;
+        font-family: 'Playfair Display', 'Dancing Script', 'Great Vibes', 'Cinzel', 'Merriweather', serif;
+    font-size: 14px;
+}
+
+
+
+
+
+.nav-list {
+    list-style-type: none;
+    display: flex;
+    gap: 20px;
+    margin: 0;
+    padding: 0;
+}
+
+.nav-list li {
+    display: inline-block;
+}
+
+.nav-list a {
+    font-size: 17px;
+    color: rgb(227, 204, 91);
+    background: linear-gradient(to right, #e3cc5b, #ffffff, #e3cc5b);
+    background-size: 200%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+
+}
+
+.nav-list a:hover {
+    color:#e5e2d3;
+    background: linear-gradient(to right, #e5e3db, #ffffff, #e3e2da);
+    background-size: 200%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-size:19px;
+}
+
+.nav-icon img {
+    margin-top: 10px;
+    height: 50px;
+    width: auto;
+}
+
+.hotel-label label {
+    font-family: 'Playfair Display', 'Dancing Script', 'Great Vibes', 'Cinzel', 'Merriweather', serif;
+    font-size: 14px;
+    font-weight: bold;
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    color: rgb(227, 204, 91);
+    background: linear-gradient(to right, #ffffff, #e3cc5b, #ffffff, #e3cc5b);
+    background-size: 200%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6);
+    animation: gradientMove 4s ease-in-out infinite alternate;
+
+  
+  }
+  
+  @keyframes gradientMove {
+    0% {
+        background-position: 0%;
+    }
+    100% {
+        background-position: 100%;
+    }
+  }
+
+
+
+/* Icon Link Styling */
+.icon-link a {
+    font-size: 1.5rem;
+    color: white;
+    transition: color 0.3s ease;
+    margin-left: 20px;
+}
+
+.icon-link a:hover {
+    color:#e3cc5b;
+}
+
+/* Notification Wrapper */
+.notification-wrapper {
+    position: relative;
+}
+
+.notification-icon {
+    margin-left: 20px;
+    text-decoration: none;
+    color: white;
+    font-size: 1.5rem;
+    position: relative;
+}
+
+.notification-badge {
+    position: absolute;
+    top: -5px;
+    right: -10px;
+    background-color: #ff0000;
+    color: white;
+    font-size: 0.8rem;
+    font-weight: bold;
+    padding: 2px 6px;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.notification-dropdown {
+    display: none;
+    position: absolute;
+    top: 35px;
+    right: 0;
+    background-color: #333;
+    border: 1px solid #444;
+    border-radius: 5px;
+    list-style: none;
+    padding: 10px 0;
+    min-width: 200px;
+    z-index: 10;
+}
+
+.notification-dropdown li {
+    color: white;
+    padding: 10px 15px;
+    font-size: 0.9rem;
+    cursor: pointer;
+}
+
+.notification-dropdown li:hover {
+    background-color: #444;
+}
+
+.notification-wrapper:hover .notification-dropdown {
+    display: block;
+}
+
+
+
+
+/* Style for the burger icon */
+.menu-toggle {
+    display: none;
+    cursor: pointer;
+    font-size: 24px;
+    color: #333;
+    padding: 10px;
+}
+
+/* Display the burger icon on smaller screens */
+@media (max-width: 768px) {
+    .menu-toggle {
+        display: block;
+    }
+
+    .navbar .nav-list {
+        display: none;
+    }
+
+    .dropdown-menu {
+        display: none;
+        position: absolute;
+        right: 10px;
+        top: 60px;
+        background-color: #fff;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        list-style: none;
+        padding: 10px;
+        z-index: 100;
+    }
+
+    .dropdown-menu.active {
+        display: block;
+    }
+
+    .dropdown-menu li {
+        margin: 10px 0;
+    }
+
+    .dropdown-menu li a {
+        text-decoration: none;
+        color: #333;
+        font-size: 16px;
+        display: block;
+    }
+
+    .dropdown-menu li a:hover {
+        color: #007BFF;
+    }
+}
+
+/* Optional: add animation for dropdown menu */
+.dropdown-menu {
+    transition: all 0.3s ease-in-out;
+}
+
+
+
+
+
+

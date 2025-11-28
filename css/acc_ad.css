@@ -1,0 +1,357 @@
+/* Reset, box sizing, and font family */
+body {
+    font-family: 'Merriweather', serif;
+    background: linear-gradient(to right, #181818, #2A2A2A);
+    font-family: Arial, sans-serif;
+}
+
+/* Main container */
+.account-management-container {
+    max-width: 1500px;
+    padding: 50px;
+    background: linear-gradient(to top, #181818, #2A2A2A);
+    margin-top: 40px;
+    margin-left: 35px;
+    border-radius: 50px;
+    margin-bottom: 50px;
+    padding: 50px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    
+}
+
+/* Table layout for form and archive */
+.account-table {
+    width: 100%;
+    padding: 40px;
+    border-top: 2px solid #605b3e2a;
+    border-bottom: 2px solid #605b3e2a;
+    border-radius:20px;
+}
+
+/* Form styling */
+.create-account-form-container {
+    vertical-align: top;
+
+    font-family: 'Merriweather', serif;
+}
+
+h2 {
+    color: #dbc1699f; /* Gold accent color for headers */
+    padding: 20px;
+}
+
+
+.create-account-form {
+    display: block;
+}
+
+.create-account-form label {
+    color: #faefca9f; /* Gold accent color for headers */
+
+    font-family: 'Merriweather', serif;
+
+}
+
+.create-account-form input[type="text"],
+.create-account-form input[type="password"] {
+    width: 100%;
+    padding: 20px 0;
+    font-size: 1em;
+    border: none;
+    border-bottom: 2px solid  #605b3e2a;
+    background: transparent;
+    color: #faefca9f; /* Gold accent color for headers */
+    outline: none;
+    transition: border-color 0.3s ease;
+
+}
+
+.submit-button {
+    background-color: #605b3eb0;
+    color: #faefca9f; /* Gold accent color for headers */
+    padding: 10px 15px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+}
+
+.submit-button:hover {
+    background-color:#d6bf3db0;
+    font-size:18px;
+
+}
+
+/* Archive section styling */
+.archive-section {
+    vertical-align: top;
+    padding-left: 20px;
+}
+
+.archive-toggle-button {
+    background-color: #605b3eb0;
+    color: #faefca9f; /* Gold accent color for headers */
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-size: 1em;
+
+}
+
+.archive-toggle-button:hover {
+    background-color:#d6bf3db0;
+    font-size:18px;
+}
+
+/* Archive table styling */
+.archive-table-wrapper {
+    margin-top: 15px;
+    padding: 10px;
+    border-radius: 10px;
+    box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.1);
+}
+
+.archive-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.archive-table th,
+.archive-table td {
+    padding: 10px;
+    border: 1px solid rgb(221, 221, 221.0.01); /* Optional: Add a border to visually separate the area */
+    text-align: left;
+}
+
+.archive-table th {
+    font-weight: bold;
+}
+
+
+
+
+
+
+.status-button {
+    padding: 6px 10px;
+    font-size: 0.9em;
+    background-color: rgba(0, 128, 0, 0.6);
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    color: #faefcaef; /* Gold accent color for headers */
+
+}
+
+.status-button:hover {
+    background-color: rgba(0, 128, 0, 0.979);
+    color: #faefcae5; /* Gold accent color for headers */
+
+}
+
+.status-button:disabled {
+    background-color: rgba(128, 0, 0, 0.6);
+    cursor: not-allowed;
+    color: #faefca9f; /* Gold accent color for headers */
+}
+
+/* Search input styling for accounts */
+.account-search-input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid rgb(221, 221, 221.0.01); /* Optional: Add a border to visually separate the area */
+    border-radius: 5px;
+    font-size: 1em;
+    background-color:#605b3e2a;
+
+}
+
+/* Archive table wrapper */
+.archive-table-wrapper {
+    margin-top: 15px;
+    background: linear-gradient(to top, #181818, #2A2A2A);
+    padding: 10px;
+    border-radius: 10px;
+    box-shadow: 0px 5px 10px rgba(221, 212, 212, 0.1);
+    color: #faefca9f; /* Gold accent color for headers */
+
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .account-management-container {
+        padding: 10px;
+    }
+
+    .account-table {
+        display: block;
+    }
+
+    .archive-table-wrapper {
+        padding: 8px;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.status-button[data-status="DEACTIVATED"] {
+    background-color: grey !important;
+    color: white !important;
+    cursor: not-allowed !important;
+    pointer-events: none !important;  /* Prevents further clicks */
+}
+
+.table-scroll-wrapper {
+    max-height: 400px; /* Set the maximum height for the scrollable area */
+    overflow-y: auto; /* Enable vertical scrolling */
+    border: 1px solid rgb(221, 221, 221.0.01); /* Optional: Add a border to visually separate the area */
+}
+
+.archive-table {
+    width: 100%; /* Make the table take full width of the container */
+    border-collapse: collapse;
+}
+
+.archive-table th, .archive-table td {
+    padding: 10px;
+    text-align: left;
+}
+
+.archive-table th {
+    background-color:#605b3e2a;
+    position: sticky; /* Keep header fixed during scroll */
+    top: 0;
+    z-index: 1;
+}
+
+
+
+
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    .center-title {
+        font-size: 24px;
+        padding: 15px;
+    }
+
+    .table-wrapper {
+        padding: 20px;
+    }
+
+    table {
+        margin-bottom: 30px;
+    }
+
+    thead {
+        display: none;
+    }
+
+    tbody tr {
+        display: block;
+        margin-bottom: 15px;
+        border: 1px solid #444;
+        border-radius: 12px;
+        padding: 14px;
+        background-color: #2A2A2A;
+    }
+
+    td {
+        display: flex;
+        justify-content: space-between;
+        padding: 12px;
+        text-align: left;
+    }
+
+    td::before {
+        content: attr(data-label);
+        font-weight: bold;
+        color: #99a1b3;
+        margin-right: 10px;
+    }
+
+    .modal-footer .btn {
+        width: 100%;
+        margin-bottom: 12px;
+    }
+}
+
+/* Modal Footer Button Styles */
+.modal-footer .btn {
+    border-radius: 8px;
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+/* Scrollbar Styles (Optional) */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: #444;
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background-color: #666;
+}
+
+
+
+
+
+.password-wrapper {
+    position: relative;
+    width: 100%;
+    display: flex;
+    align-items: center;
+}
+
+.input-field {
+    background: none;
+    border: none;
+    outline: none;
+    color: #fff;
+    flex-grow: 1;
+    padding: 10px 0;
+    font-size: 16px;
+}
+
+.input-field::placeholder {
+    color: #666; /* Placeholder color */
+}
+
+.toggle-password {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #888;
+    cursor: pointer;
+    display: none; /* Initially hidden */
+}
+
+.toggle-password:hover {
+    color: #fff; /* Highlight color on hover */
+}

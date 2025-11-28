@@ -1,0 +1,340 @@
+
+/* Black Fixed Navbar with Glassmorphism Effect */
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+  background: linear-gradient(to top, #181818, #2A2A2A);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+  padding: 0.75rem 2rem;
+}
+
+
+/* Base Styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+  background-color: #1e1e2e;
+  color: #f0f0f0;
+  overflow-x: hidden;
+  background: linear-gradient(to top, #181818, #2A2A2A);
+  background-image: 
+  linear-gradient(to bottom, rgba(0, 0, 0, 1), rgba(0, 0, 0, .7),rgba(0, 0, 0, 0.9)), /* Top gradient overlay */
+  url("/static/images/hr_bg.jpeg");
+background-size: cover;           /* Ensures the image covers the entire screen */
+background-position: center;      /* Centers the background image */
+background-repeat: no-repeat;     /* Prevents the image from repeating */
+background-attachment: fixed;  
+}
+
+/* Main Container */
+.container {
+  margin-top: 120px;
+  padding: 20px;
+  max-width: 1200px;
+  width: 100%;
+  border-radius: 10px;
+  margin-top: 120px;
+  padding: 20px;
+  border-radius: 10px;
+  
+}
+
+
+
+h3{
+  font-family: 'Merriweather', serif;
+  margin-top: 10px;
+  text-align: left;
+  font-size: 20px;
+  color: #faf4e29f; /* Gold accent color for headers */
+  background-color: rgba(202, 190, 123, 0.1);
+  padding: 10px;
+  border-radius: 50px;
+  text-align: left;
+
+}
+
+/* Form Section */
+.form-section {
+  background: linear-gradient(to top, #181818, #2A2A2A);
+  backdrop-filter: blur(10px);
+  padding: 20px;
+  border-radius: 10px;
+  
+}
+
+/* Form Content Container (Two-Column Layout) */
+.form-content-container {
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+  flex-wrap: wrap; /* Allow wrapping on smaller screens */
+  
+  
+}
+
+/* Guest Information Container (Left Column) */
+.guest-info-container {
+  flex: 1 1 300px; /* Flexible width with a minimum of 300px */
+  max-width: 500px;
+  position: sticky;
+  top: 20px;
+  align-self: flex-start;
+  padding: 20px;
+  background: linear-gradient(to bottom, #181818, #2A2A2A);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+  margin-top:20px ;
+
+
+
+}
+
+/* Rooms Section (Right Column) */
+.rooms-section {
+  flex: 1 1 700px; /* Flexible width with a minimum of 400px */
+  max-width: 800px;
+  backdrop-filter: blur(10px);
+  padding: 20px;
+  border-radius: 10px;
+}
+
+/* Input Fields */
+input[type="text"],
+input[type="email"],
+button {
+  width: 100%;
+  padding: 10px 0;
+  font-size: 1em;
+  border: none;
+  border-bottom: 2px solid  #605b3e2a;
+  background: transparent;
+  color: #faefca9f; /* Gold accent color for headers */
+  outline: none;
+  transition: border-color 0.3s ease;
+
+}
+
+input[type="date"],
+button {
+  width: 100%;
+  padding: 10px 0;
+  font-size: 1em;
+  border: none;
+  border-bottom: 2px solid  #605b3e2a;
+  background:  #605b3e2a;;
+  color: #faefca9f; /* Gold accent color for headers */
+  outline: none;
+  transition: border-color 0.3s ease;
+
+}
+
+
+
+/* Input Focus Effect */
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="date"]:focus {
+  border-color: rgba(96, 91, 62, 5);
+  outline: none;
+}
+
+
+
+/* Button Styling */
+button {
+  background-color: #605b3eb0;
+  color: #faefca9f; /* Gold accent color for headers */
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s;
+  border: none;
+  border-radius: 5px;
+}
+
+button:hover {
+  background-color: #605b3eb0;
+  transform: translateY(-2px);
+}
+
+/* Labels */
+label {
+  padding: 20px;
+  font-size: 14px;
+  font-weight: bold;
+  margin-bottom: 5px;
+  color: #f1ecdc9f; /* Gold accent color for headers */
+  text-align: center;
+}
+
+/* Date Inputs Layout */
+.date-inputs {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+  .container {
+    max-width: 1000px;
+  }
+
+  .form-content-container {
+    flex-direction: row;
+    gap: 15px;
+  }
+
+  .guest-info-container,
+  .rooms-section {
+    flex: 1 1 45%; /* Use 45% width for both columns */
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 992px) {
+  .form-content-container {
+    flex-direction: column; /* Stack vertically on smaller screens */
+    gap: 20px;
+  }
+
+  .guest-info-container,
+  .rooms-section {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .guest-info-container {
+    position: static; /* Disable sticky positioning */
+  }
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 10px;
+  }
+
+  input[type="text"],
+  input[type="email"],
+  input[type="date"],
+  button {
+    font-size: 14px;
+    padding: 10px;
+  }
+
+  h3 {
+    font-size: 18px;
+  }
+
+  label {
+    font-size: 12px;
+  }
+
+  .rooms-section {
+    padding: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: 5px;
+  }
+
+  input[type="text"],
+  input[type="email"],
+  input[type="date"],
+  button {
+    font-size: 12px;
+    padding: 8px;
+  }
+
+  h3 {
+    font-size: 16px;
+  }
+
+  label {
+    font-size: 11px;
+  }
+
+  .rooms-section {
+    padding: 5px;
+  }
+}
+
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black background */
+  display: none; /* Hidden by default */
+  z-index: 1000; /* Ensure it's above all other elements */
+}
+
+.spinner {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border: 8px solid rgba(0, 0, 0, 0.1);
+  border-top: 8px solid #007bff;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+      transform: rotate(0deg);
+  }
+  100% {
+      transform: rotate(360deg);
+  }
+}
+
+
+
+
+
+.bank {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 10px auto;
+  padding: 5px;
+  border: 1px solid #dddddd35; /* Subtle border */
+  border-radius: 5px; /* Rounded corners */
+  max-width: 300px; /* Limit the width */
+  text-align: center; /* Center-align text */
+  font-family: Arial, sans-serif; /* Clean font */
+}
+
+.bank label {
+  font-weight: bold;
+  font-size: 13px;
+  margin-bottom: 5px;
+}
+
+.bank span {
+  font-size: 20px;
+  font-weight: bold;
+  color: #e4e43f;
+}
+
+.bank small {
+  font-size: 12px;
+  color: gray;
+  display: block; /* Ensure it appears on a new line */
+}
+
+

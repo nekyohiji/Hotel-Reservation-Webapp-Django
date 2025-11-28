@@ -1,0 +1,148 @@
+/* Flex container for the two-column layout */
+.flex-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 20px;
+    padding: 20px;
+
+}
+
+/* Rooms Container (Left Side) */
+.rooms-container {
+
+    flex: 1;
+    max-width: 60%;
+}
+
+
+/* Room Expansion Section (Right Side) */
+.room-expansion-section {
+    background: linear-gradient(to top, #181818, #2A2A2A);
+
+    flex: 0.4;
+    max-width: 35%;
+    background-color: #2A2A2A;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    position: sticky;
+    top: 20px; /* Distance from the top of the viewport */
+    align-self: flex-start; /* Ensures proper alignment in the flex layout */
+}
+
+/* Main button styling */
+.main-button {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    background-color: #605b3eb0;
+    color: #faefca9f; /* Gold accent color for headers */
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-align: center;
+    transition: background 0.3s;
+}
+
+.main-button:hover {
+    background-color:#d6bf3db0;
+}
+
+/* Form Styling */
+.room-expansion-section form {
+    margin-top: 10px;
+}
+
+.room-expansion-section label {
+    color: #faefca9f; /* Gold accent color for headers */
+    display: block;
+    margin-bottom: 5px;
+}
+
+.room-expansion-section input,
+.room-expansion-section textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #666;
+    border-radius: 5px;
+    background-color: #333;
+    color: #faefca9f; /* Gold accent color for headers */
+}
+
+.room-expansion-section button[type="submit"] {
+    width: 100%;
+    padding: 10px;
+    background-color: rgba(0, 128, 0, 0.6);
+    color: #faefca9f; /* Gold accent color for headers */
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.room-expansion-section button[type="submit"]:hover {
+    background-color: rgba(0, 128, 0, 0.979);
+}
+
+
+
+
+
+
+/* Remove Button Styling */
+.remove-button {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+    background-color: rgba(128, 0, 0, 0.6);
+    color: #faefca9f; /* Gold accent color for headers */
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-align: center;
+    transition: background 0.3s;
+    margin-bottom: 10px;
+}
+
+.remove-button:hover {
+    background-color: rgba(128, 0, 0, 0.9);
+}
+
+
+
+/* Style for the Deactivate Room button */
+.deact {
+
+
+    display: block;
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    background-color: #f44336; /* Red background */
+    color: #ffffff; /* White text */
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-align: center;
+    transition: background 0.3s;
+}
+
+.deact:hover {
+    background-color: #d32f2f; /* Darker red on hover */
+    transform: scale(1.05); /* Slightly increase size on hover */
+}
+
+.deact:active {
+    background-color: #b71c1c; /* Even darker red on click */
+    transform: scale(1); /* Reset size on click */
+}
+
+.deact:disabled {
+    background-color: #e0e0e0; /* Gray background when disabled */
+    color: #9e9e9e; /* Light gray text */
+    cursor: not-allowed; /* Not-allowed cursor when disabled */
+}

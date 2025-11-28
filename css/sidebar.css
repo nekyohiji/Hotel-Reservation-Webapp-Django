@@ -1,0 +1,304 @@
+/* Reset and box sizing */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Merriweather', serif;
+
+}
+
+/* Admin Sidebar */
+.admin-sidebar {
+    height: 100vh;
+    width: 90px;
+    background: linear-gradient(to top, #181818, #2A2A2A);
+    transition: width 0.3s ease;
+    overflow: hidden;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+    margin-left: 20px;
+    border-radius: 70px;
+    margin-top: 10px;
+    margin-bottom: 20px;
+    box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.7);
+}
+
+.admin-sidebar:hover {
+    width: 250px;
+}
+
+.admin-sidebar-list {
+    list-style: none;
+    padding: 20px 0;
+    position: relative;
+    height: calc(100vh - 60px);
+}
+
+.admin-sidebar-item {
+    display: flex;
+    align-items: center;
+    padding: 15px;
+    color: #faefca9f; /* Gold accent color for headers */
+    cursor: pointer;
+    position: relative;
+    transition: background 0.3s;
+    border-top-right-radius: 20px;
+    border-bottom-right-radius:20px ;
+}
+
+.admin-sidebar-item:hover,
+.admin-active {
+    background-color: #605b3e;
+    border-top-right-radius: 20px;
+    border-bottom-right-radius:20px ;
+    
+}
+
+/* Line on the left side of active/hovered items */
+.admin-sidebar-item::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    margin-top: 12px;
+    height: 50%;
+    width: 3px;
+    border-radius: 2px;
+    background-color: #b1980d;
+    transition: width 0.3s ease, opacity 0.3s;
+    opacity: 0;
+    border-top-right-radius: 20px;
+    border-bottom-right-radius: 20px;
+}
+
+/* Show the line on hover */
+.admin-sidebar-item:hover::before {
+    opacity: 1;
+    width: 5px;
+}
+
+/* Make the line stay visible on clicked/active item */
+.admin-sidebar-item.active::before {
+    opacity: 1;
+    width: 5px;
+}
+
+
+.admin-sidebar-item:hover::before {
+    opacity: 1;
+    width: 5px;
+}
+
+.admin-active::before {
+    opacity: 1;
+    width: 5px;
+}
+
+/* Sidebar Link Colors */
+.admin-sidebar-link {
+    color: #faefca9f; /* Gold accent color for headers */
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+/* Sidebar Icon Hover & Active State */
+.admin-sidebar-item .admin-icon {
+    margin-right: 20px;
+    font-size: 16px;
+    margin-left: 20px;
+    transition: color 0.3s, transform 0.3s;
+    color: #faefca9f; /* Gold accent color for headers */
+}
+
+.admin-sidebar-item:hover .admin-icon,
+.admin-active .admin-icon {
+    color: #a09039;
+    transform: scale(1.1);
+}
+
+/* Sidebar Text */
+.admin-text {
+    white-space: nowrap;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.admin-sidebar:hover .admin-text {
+    opacity: 1;
+}
+
+/* Admin Logout Button */
+.admin-logout-btn {
+    display: flex;
+    justify-content: center;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    padding: 15px;
+    color: #faefca9f; /* Gold accent color for headers */
+    text-decoration: none;
+    cursor: pointer;
+    transition: background 0.3s;
+    text-align: right;
+    margin-top: 20px;
+    border-top: 2px solid #605b3e2a;
+
+}
+
+.admin-logout-btn:hover {
+    color: #C0392B;
+}
+
+.admin-logout-btn .admin-icon {
+    margin-bottom: 30px;
+    margin-left: 4px;
+    background-color: #605b3eb0;
+    padding: 20px;
+    border-radius: 20px;
+
+    
+}
+
+/* Main content adjusts when sidebar is hovered */
+.admin-main-content {
+    margin-left: 80px;
+    padding: 20px;
+    transition: margin-left 0.3s;
+    flex-grow: 1;
+}
+
+.admin-sidebar:hover ~ .admin-main-content {
+    margin-left: 250px;
+}
+
+/* Sidebar Logo */
+.admin-logo {
+    width: 80px;
+    height: 80px;
+    object-fit: contain;
+    margin: 20px auto;
+    display: block;
+    border-bottom: 2px solid #605b3e2a;
+    
+}
+
+/* Burger Menu Icon */
+.burger-menu {
+    display: none;
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    background-color: #2A2A2A;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    color: #faefca9f; /* Gold accent color for headers */
+    font-size: 24px;
+    cursor: pointer;
+    z-index: 2000;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    .burger-menu {
+        display: block;
+    }
+
+    .admin-sidebar {
+        display: none;
+    }
+
+    .admin-main-content {
+        margin-left: 0;
+    }
+}
+
+/* Dropdown Menu Links */
+.dropdown-list a {
+    color: #FFD700; /* Gold for links */
+    font-size: 16px; /* Adjust font size for readability */
+    padding: 10px 20px; /* Add spacing for comfortable clicking */
+    margin-bottom: 5px; /* Add spacing between links */
+    text-decoration: none; /* Remove underline */
+    display: block; /* Ensure links span the full width for better UX */
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.dropdown-list a:hover {
+    background-color: #3E5060; /* Darker background for hover */
+    color: #FFFFFF; /* White text on hover */
+    border-radius: 5px; /* Add rounded corners on hover */
+}
+
+
+/* Responsive Dropdown Menu */
+.dropdown-menu {
+    display: none;
+    position: fixed;
+    top: 60px;
+    right: 20px;
+    width: 250px;
+    max-width: 90%;
+    max-height: 300px;
+    background-color: #2A2A2A;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 1500;
+    animation: fadeIn 0.3s ease;
+    overflow-y: auto;
+}
+
+.dropdown-menu::-webkit-scrollbar {
+    width: 8px;
+}
+
+.dropdown-menu::-webkit-scrollbar-thumb {
+    background-color: #3E5060;
+    border-radius: 10px;
+}
+
+.dropdown-menu::-webkit-scrollbar-track {
+    background-color: #2A2A2A;
+}
+
+.dropdown-list a {
+    color: #faefca9f; /* Gold accent color for headers */
+    font-size: 16px;
+    padding: 15px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.dropdown-list a:hover {
+    background-color: #3E5060;
+}
+
+/* Animation for dropdown menu */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Adjust logo size for smaller screens */
+@media (max-width: 768px) {
+    .admin-logo {
+        width: 80px;
+        height: 80px;
+    }
+}
+
+@media (max-width: 480px) {
+    .admin-logo {
+        width: 60px;
+        height: 60px;
+    }
+}

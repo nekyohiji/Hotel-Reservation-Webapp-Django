@@ -1,0 +1,181 @@
+/* General Styles */
+body {
+    font-family: Arial, sans-serif;
+    background: linear-gradient(to right, #181818, #2A2A2A);
+    color: #faefca9f; /* Gold accent color for headers */
+}
+
+/* Container Styling */
+.container {
+    max-width: 800px;
+    margin: 200px auto;
+    padding:100px;
+    background: linear-gradient(to right, #181818, #2A2A2A);
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+
+}
+
+/* Tabs Navigation */
+.nav-tabs {
+    list-style: none;
+    padding-left: 0;
+    border-bottom: 2px solid #ddd;
+}
+
+.nav-item {
+    margin-bottom: 0;
+}
+
+.nav-link {
+    color: #30502c;
+    font-weight: 600;
+    padding: 10px 15px;
+    border-radius: 4px;
+}
+
+.nav-link:hover {
+    background: linear-gradient(to right, #181818, #2A2A2A);
+    color: #30502c;
+}
+
+.nav-link.active {
+    background: linear-gradient(to right, #181818, #2A2A2A);
+    color: #fff;
+}
+
+/* Form Section */
+form {
+    margin-top: 20px;
+}
+
+/* Form Container */
+.col-md-8 {
+    padding: 15px;
+    border-left: 4px solid #faefca9f; /* Gold accent color for headers */
+    background: linear-gradient(to right, #181818, #2A2A2A);
+    border-radius: 8px;
+}
+
+/* Vertical Layout for Inputs */
+.row {
+    display: flex;
+    flex-direction: column; /* Stacks the inputs vertically */
+    gap: 20px;
+    margin-bottom: 15px;
+}
+
+/* Labels */
+.form-label {
+    font-weight: 600;
+    margin-bottom: 5px;
+}
+
+/* Inputs */
+.form-control {
+    width: 100%;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    font-size: 14px;
+
+}
+
+/* Readonly Input Styling */
+.form-control[readonly] {
+    width: 100%;
+    padding: 10px 0;
+    font-size: 1em;
+    border: none;
+    border-bottom: 2px solid  #605b3e2a;
+    background: transparent;
+    color: #f3f0e652; /* Gold accent color for headers */
+    outline: none;
+    transition: border-color 0.3s ease;
+    
+}
+
+/* Headings */
+h5 {
+    color: #faefca9f; /* Gold accent color for headers */
+    font-weight: 700;
+    margin-bottom: 20px;
+}
+
+/* Spacing for Form Groups */
+.mb-3 {
+    margin-bottom: 1.5rem;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 576px) {
+    .form-control {
+        width: 100%;
+    }
+}
+
+
+
+/* Style for the burger icon */
+.menu-toggle {
+    display: none;
+    cursor: pointer;
+    font-size: 24px;
+    color: #333;
+    padding: 10px;
+}
+
+/* Display the burger icon on smaller screens */
+@media (max-width: 768px) {
+    .menu-toggle {
+        display: block;
+    }
+
+    .navbar .nav-list {
+        display: none;
+    }
+
+    .dropdown-menu {
+        display: none;
+        position: absolute;
+        right: 10px;
+        top: 60px;
+        background-color: #fff;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        list-style: none;
+        padding: 10px;
+        z-index: 100;
+    }
+
+    .dropdown-menu.active {
+        display: block;
+    }
+
+    .dropdown-menu li {
+        margin: 10px 0;
+    }
+
+    .dropdown-menu li a {
+        text-decoration: none;
+        color: #333;
+        font-size: 16px;
+        display: block;
+    }
+
+    .dropdown-menu li a:hover {
+        color: #007BFF;
+    }
+}
+
+/* Optional: add animation for dropdown menu */
+.dropdown-menu {
+    transition: all 0.3s ease-in-out;
+}
+
+
+
+
+
+

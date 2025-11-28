@@ -1,0 +1,137 @@
+
+body {
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    position: relative; /* Allows overlay elements */
+}
+
+body::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.8)),
+                        url('/static/images/aa.jpg');
+    background-size: cover;
+    background-position: center;
+    filter: blur(10px); /* Adds the blur effect */
+    z-index: -1; /* Keeps it behind the content */
+}
+
+
+
+
+
+
+/*------------ Modal Styling ------------*/
+.modal-content {
+
+    border-radius: 20px;
+    background: linear-gradient(to bottom, #734800, #b58b41);
+    color: #fff;
+    width: 700px;
+    padding: 20px;
+    margin: 50px auto;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+    text-align: center;
+}
+
+.modal-header {
+    padding: 20px;
+    border-bottom: none;
+    margin-bottom: 15px;
+}
+
+.modal-header h2 {
+    font-size: 28px;
+    margin: 0;
+    color: #fff;
+}
+
+.modal-body {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.modal-body p {
+    font-size: 16px;
+    margin: 0 0 15px;
+}
+
+.modal-body .form-control {
+    border-radius: 10px;
+    border: none;
+    padding: 10px;
+    font-size: 14px;
+    background: #fff;
+    color: #333;
+}
+
+.modal-body .form-control:focus {
+    outline: none;
+    box-shadow: 0 0 5px #ffa500;
+}
+
+.modal-body .btn {
+    margin-top: 15px;
+    padding: 10px;
+    font-size: 16px;
+    background: #ffa500;
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.modal-body .btn:hover {
+    background: #cc8400;
+}
+
+/*------------ Responsive Adjustments ------------*/
+@media (max-width: 768px) {
+    .modal-content {
+        width: 90%;
+        padding: 15px;
+    }
+
+    .modal-header h2 {
+        font-size: 22px;
+    }
+
+    .modal-body p {
+        font-size: 14px;
+    }
+}
+
+
+.toggle-btn {
+    cursor: pointer;
+    font-size: 20px;
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+.input-container {
+    position: relative;
+    margin-bottom: 10px;
+}
+input {
+    padding-right: 35px; /* Space for the icon */
+    width: 80%; /* Ensure the input takes the full width available */
+    font-size: 16px; /* Ensure the placeholder has proper size */
+}
+::placeholder {
+    font-size: 16px; /* Adjust placeholder font size */
+    color: #888; /* Placeholder color */
+}

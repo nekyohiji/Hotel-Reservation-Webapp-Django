@@ -1,0 +1,521 @@
+/* General Reset */
+body, html {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  height: 100%;
+  overflow: hidden;
+}
+
+main.hero-section {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  margin-top: 60px;
+}
+
+/* Video Background */
+.video-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1; /* Ensure background layer is below the content */
+}
+
+.video-background video {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.video-background::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 9), rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.3)); /* Dark gradient */
+  z-index: 1; /* Place the gradient above the video */
+}
+
+/* Content Container */
+.content-container {
+  position: absolute;
+  top: 30%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  z-index: 10; /* Keep the content on top of the video */
+}
+
+h3 {
+  font-family: 'Playfair Display', 'Dancing Script', 'Great Vibes', 'Cinzel', 'Merriweather', serif;
+  color: #f8e379;
+  font-size: 15px;
+  font-weight: 50;
+}
+
+
+.logo_ {
+  height: 100px;
+  width: 100px;
+  margin-top: 6px;
+}
+
+.content-container .description {
+  font-family: 'Playfair Display', 'Dancing Script', 'Great Vibes', 'Cinzel', 'Merriweather', serif;
+  margin-bottom: 20px;
+  color: #f3e7ac;
+  font-size: 16px;
+  font-weight: 50;
+  background-color: rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  border: 1px solid rgba(245, 245, 245, 0.1);
+}
+
+/* Button Styling */
+.discover-button {
+  font-family: 'Playfair Display', 'Dancing Script', 'Great Vibes', 'Cinzel', 'Merriweather', serif;
+  padding: 10px 20px;
+  cursor: pointer;
+  font-weight: bold;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: rgb(0, 0, 0);
+  background: linear-gradient(to right, #ffffff, #e3cc5b, #ffffff, #e3cc5b);
+  background-size: 200%;
+  border: 3px double rgba(21, 21, 20, 0.8); /* Double border effect */
+  border-radius: 15px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2), 0 6px 20px rgba(0, 0, 0, 0.19); /* Creates depth */
+  transition: background-position 0.3s ease-in-out;
+  animation: gradientMove 4s ease-in-out infinite alternate;
+  margin-bottom: 50px;
+}
+
+/* Button Hover Effect */
+.discover-button:hover {
+  background-position: 100%;
+  border: solid 2px rgba(255, 255, 255, 0.3);
+  box-shadow: 0px 4px 10px rgba(234, 243, 64, 0.2);
+  animation: gradientMove 0.5s ease-in-out infinite alternate;
+}
+
+/* Destination Cards */
+.destination-cards-container {
+  position: absolute;
+  bottom: 10%; /* Adjust the bottom position */
+  left: 50%;
+  transform: translateX(-50%);
+  width: 90%;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap; /* Allow cards to wrap to the next line */
+  align-items: center;
+  gap: 20px; /* Increased gap for better spacing */
+  z-index: 10; /* Ensure the cards are above the video */
+  padding-bottom: 50px; /* Extra space for the button and text */
+}
+
+.destination-cards {
+  display: flex;
+  flex-wrap: nowrap;
+  overflow: hidden;
+  padding: 10px;
+  gap: 15px;
+  scrollbar-width: thin;
+}
+
+.logo_d {
+  height: 100px;
+  width: 100px;
+}
+
+.title {
+  font-family: 'Playfair Display', 'Dancing Script', 'Great Vibes', 'Cinzel', 'Merriweather', serif;
+  letter-spacing: 5px;
+  text-transform: uppercase;
+  color: rgb(227, 204, 91);
+  background: linear-gradient(to right, #ffffff, #e3cc5b, #ffffff, #e3cc5b);
+  background-size: 200%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6);
+  animation: gradientMove 4s ease-in-out infinite alternate;
+}
+
+/* CARD - Base Size */
+.card {
+  margin-top: 20px;
+  position: relative;
+  flex: 0 1 calc(33.33% - 20px); /* Controls the width of the cards */
+  width: 200px; /* Maximum width of the card for desktop */
+  height: 140px; /* Height of the card for desktop */
+ gap: 20;
+  background-color: #f4f4f4;
+  background-size: cover;
+  background-position: center;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 10px;
+  cursor: pointer;
+  border: 3px double rgba(253, 253, 250, 0.1); /* Double border effect */
+}
+
+/* Gradient Inside Card */
+.card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.1)); /* Gradient inside card */
+  z-index: 1; /* Place behind the text */
+  pointer-events: none; /* Allow interaction */
+  
+}
+
+.card:hover {
+  transform: scale(1.1);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+}
+
+.card.featured {
+  border: 4px double rgba(21, 21, 20, 0.8); /* Double border effect */
+}
+
+.card-location {
+  font-size: 1rem;
+  color: #fff; /* Improved readability */
+  margin-top: 10px; /* Add spacing below the card */
+  text-align: center; /* Center-align the location text */
+  z-index: 2; /* Ensure text is above the gradient */
+}
+
+.card-title {
+  font-size: 0.9rem;
+  color: #fff; /* Improved readability */
+  margin-top: 5px; /* Add spacing below the location */
+  text-align: center; /* Center-align the title text */
+  z-index: 2; /* Ensure text is above the gradient */
+}
+
+/* Responsive Design */
+
+/* Tablet View */
+@media (max-width: 768px) {
+
+  .discover-button {
+    font-family: 'Playfair Display', 'Dancing Script', 'Great Vibes', 'Cinzel', 'Merriweather', serif;
+    padding: 5px 10px;
+    cursor: pointer;
+    font-weight: bold;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: rgb(0, 0, 0);
+    background: linear-gradient(to right, #ffffff, #e3cc5b, #ffffff, #e3cc5b);
+    background-size: 200%;
+    border: 3px double rgba(21, 21, 20, 0.8); /* Double border effect */
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2), 0 6px 20px rgba(0, 0, 0, 0.19); /* Creates depth */
+    transition: background-position 0.3s ease-in-out;
+    animation: gradientMove 4s ease-in-out infinite alternate;
+    margin-bottom: 100px;
+  }
+  .card {
+    flex: 0 1 calc(50% - 20px); /* 2 cards per row */
+    max-width: 250px; /* Adjust maximum width */
+    height: 100px; /* Adjust card height for tablets */
+  }
+
+
+     .destination-cards-container {
+        position: relative;
+        margin-top: 500px;
+  }
+
+  .card-location {
+    font-size: 0.9rem;
+
+  }
+
+  .card-title {
+    font-size: 0.8rem;
+
+  }
+
+
+  body, html {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    height: 100%;
+    overflow: auto;
+  }
+  
+
+}
+
+
+
+
+
+
+/* Mobile View */
+@media (max-width: 480px) {
+
+  body, html {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    height: 100%;
+    overflow: auto;
+  }
+  .card {
+    max-width: 100%; /* Full width */
+    height: 200px; /* Adjust card height for mobile */
+    margin-top: 200px;
+
+
+  }
+
+  .destination-cards-container {
+    bottom: 30%;
+    padding-bottom: 80px;
+  }
+
+  .card-location {
+    font-size: 0.8rem;
+  }
+
+  .card-title {
+    font-size: 0.7rem;
+  }
+  
+}
+
+/* Very Small Mobile View */
+@media (max-width: 360px) {
+
+
+  body, html {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    height: 100%;
+    overflow: auto;
+  }
+
+  .card {
+    max-width: 100%; /* Full width */
+    height: 150px; /* Smaller height for very small screens */
+  }
+
+  .destination-cards-container {
+    bottom: 40%;
+    padding-bottom: 100px;
+  }
+
+  .card-location {
+    font-size: 0.7rem;
+  }
+
+  .card-title {
+    font-size: 0.6rem;
+  }
+}
+
+/* Gradient Animation */
+@keyframes gradientMove {
+  0% {
+    background-position: 0%;
+  }
+  100% {
+    background-position: 100%;
+  }
+}
+
+.description {
+  font-size: 16px;
+  color: #f7f4f1;
+  margin-bottom: 20px;
+}
+
+/* Modal Styling */
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed;
+  z-index: 100; /* Above all other elements */
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.7); /* Black background with opacity */
+}
+
+.modal-content {
+  position: relative;
+  margin: 10% auto; /* Centered vertically */
+  padding: 20px;
+  background: #ffffff;
+  border-radius: 10px;
+  max-width: 600px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  text-align: center;
+}
+
+.modal-image {
+  width: 100%;
+  height: 300px;
+  background-size: cover;
+  background-position: center;
+  border-radius: 10px;
+  margin-bottom: 20px;
+}
+
+.modal-text h2 {
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+.modal-text p {
+  font-size: 16px;
+  color: #555;
+}
+
+/* Close Button Styling */
+.close-button {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  font-size: 28px;
+  font-weight: bold;
+  color: #333;
+  cursor: pointer;
+}
+
+.close-button:hover {
+  color: #555;
+}
+/* General Modal Styling */
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed;
+  z-index: 100; /* Above all other elements */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full viewport width */
+  height: 100%; /* Full viewport height */
+  overflow: auto; /* Allow scrolling if content overflows */
+  background-color: rgba(0, 0, 0, 0.7); /* Black background with opacity */
+}
+
+/* Modal Content Styling */
+.modal-content {
+  position: relative;
+  margin: 10% auto; /* Center vertically */
+  padding: 20px;
+  background: #ffffff;
+  border-radius: 10px;
+  max-width: 600px; /* Limit max width */
+  width: 90%; /* Take up 90% of the screen width on small screens */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  text-align: center;
+}
+
+/* Modal Image */
+.modal-image {
+  width: 100%; /* Full width for responsiveness */
+  height: 300px; /* Set a default height */
+  background-size: cover; /* Make the image cover its container */
+  background-position: center;
+  border-radius: 10px;
+  margin-bottom: 20px;
+}
+
+/* Modal Text */
+.modal-text h2 {
+  font-size: 24px; /* Responsive font size */
+  margin-bottom: 10px;
+}
+
+.modal-text p {
+  font-size: 16px;
+  color: #555;
+}
+
+/* Close Button */
+.close-button {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  font-size: 28px;
+  font-weight: bold;
+  color: #333;
+  cursor: pointer;
+}
+
+.close-button:hover {
+  color: #555;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .modal-content {
+      max-width: 80%; /* Adjust modal width for tablets */
+      padding: 15px;
+  }
+
+  .modal-image {
+      height: 200px; /* Adjust image height for tablets */
+  }
+
+  .modal-text h2 {
+      font-size: 20px; /* Smaller font size for headers */
+  }
+
+  .modal-text p {
+      font-size: 14px;
+  }
+
+  .close-button {
+      font-size: 24px; /* Adjust button size */
+  }
+}
+
+@media (max-width: 480px) {
+  .modal-content {
+      max-width: 90%; /* Use more screen space on small devices */
+      padding: 10px;
+  }
+
+  .modal-image {
+      height: 150px; /* Adjust image height for small screens */
+  }
+
+  .modal-text h2 {
+      font-size: 18px; /* Smaller font size for headers */
+  }
+
+  .modal-text p {
+      font-size: 12px;
+  }
+
+  .close-button {
+      font-size: 20px; /* Adjust button size */
+  }
+}

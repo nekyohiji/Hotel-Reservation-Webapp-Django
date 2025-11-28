@@ -1,0 +1,559 @@
+/* General Container Styling */
+.form-container {
+    margin-top: 100px;
+    padding-top: 20px;
+    position: sticky;
+    top: 100px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    z-index: 10;
+    margin-left: 100px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 400px;
+    height: 600px;
+    background: linear-gradient(to top, rgba(0, 0, 0, 1), rgba(51, 51, 51, 0.8), rgba(184, 134, 11, 0.2), rgba(51, 51, 51, 0.8), rgba(0, 0, 0, 1));
+    border: 10px double rgba(232, 232, 179, 0.2);
+    color:white;
+}
+
+.headline {
+    font-size: 8px;
+    font-weight: bold;
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    color: rgb(227, 204, 91);
+    background: linear-gradient(to right, #ffffff, #e3cc5b, #ffffff, #e3cc5b);
+    background-size: 200%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-left: 10px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6);
+    animation: gradientMove 4s ease-in-out infinite alternate;
+    margin-bottom: 20px;
+}
+
+@keyframes gradientMove {
+    0% {
+        background-position: 0%;
+    }
+    100% {
+        background-position: 100%;
+    }
+}
+
+
+/* Main Inline Flex Layout */
+.inline-layout {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 20px;
+    width: 100%;
+    max-width: 1600px;
+    margin: 0 auto;
+}
+
+/* Reservation Form (Left Side) */
+.reservation-form-container {
+    flex: 0 0 35%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Rooms List (Right Side) */
+.rooms-list-container {
+    flex: 0 0 60%;
+    overflow-y: auto;
+    padding-left: 20px;
+    height: 600px;
+    margin-top: 100px;
+}
+
+
+/* Date Inputs Styling */
+.date-inputs-gst {
+    display: flex;
+    flex-direction: row;
+    gap: 20px; /* Adjust spacing as needed */
+    justify-content: center; /* Center the input group */
+    width: 80%; /* Full width of the parent */
+    max-width: 600px; /* Ensure it fits within the main container */
+    margin: 0 auto; /* Center the container */
+    box-sizing: border-box; /* Include padding in the width */
+}
+
+/* Individual Date Input Container */
+.date-input-container {
+    flex: 1; /* Make the container flexible */
+    max-width: 45%; /* Ensure inputs don't take up too much space */
+    margin: 0 5px; /* Add margin for spacing */
+}
+
+.date-input-container label {
+    font-size: 13px; /* Adjust font size */
+    margin-bottom: 5px; /* Space below the label */
+
+}
+
+/* Input Field Styling */
+.form-control {
+    border: 1px solid #666; /* Subtle border */
+    border-radius: 8px;
+    background-color: #333;
+    color: #ddd;
+    padding: 8px 10px;
+    font-size: 12px;
+    width: 90%; /* Take the full width of the container */
+    max-width: 180px; /* Set a maximum width for better spacing */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+
+.form-control:focus {
+    outline: none; /* Remove the default outline */
+    border-color: #e3cc5b; /* Change border color on focus */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Enhanced shadow on focus */
+    background-color: #444; /* Slightly darker background on focus */
+}
+
+
+
+
+
+
+
+
+
+
+
+/* Button Styles */
+
+#remove-photo {
+    width: 100%;
+    max-width: 250px;    
+    margin-top: 10px;
+    margin-bottom: 10px;
+    background-color: red;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+
+
+
+
+
+/* Apply the button-orange styles to the reservation button */
+#reservationButton {
+    font-family: 'Playfair Display', 'Dancing Script', 'Great Vibes', 'Cinzel', 'Merriweather', serif;
+    padding: 0.5rem 1rem;
+    cursor: not-allowed; /* Default cursor for disabled state */
+    font-weight: bold;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: rgb(0, 0, 0);
+    background: linear-gradient(to right, #ffffff, #e3cc5b, #ffffff, #e3cc5b);
+    background-size: 200%;
+    border: 4px double rgba(21, 21, 20, 0.8); /* Double border effect */
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2), 0 6px 20px rgba(0, 0, 0, 0.19); /* Creates depth */
+    transition: background-position 0.3s ease-in-out, background-color 0.3s ease, cursor 0.3s ease;
+    animation: gradientMove 4s ease-in-out infinite alternate;
+    width: 100%;
+    max-width: 200px; /* Optional: limit button width */
+    font-size: 10px;
+    margin-bottom: 10px;
+}
+
+/* Enabled style for the submit button */
+#reservationButton:enabled {
+    background-color: transparent; /* Background defined by gradient */
+    color: #000; /* Ensure text color is visible */
+    cursor: pointer; /* Pointer cursor when enabled */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Subtle shadow to make it pop */
+}
+
+/* Hover effect for the enabled submit button */
+#reservationButton:enabled:hover {
+    background-position: 100%;
+    transform: scale(1.09);
+    border: solid 2px rgba(255, 255, 255, 0.3);
+    box-shadow: 0px 4px 10px rgba(234, 243, 64, 0.2);
+    animation: gradientMove 0.5s ease-in-out infinite alternate;
+}
+
+/* Disabled state overrides */
+#reservationButton:disabled {
+    background-color: #bbb; /* Gray background when disabled */
+    color: #000000;
+    cursor: not-allowed; /* Not-allowed cursor when disabled */
+}
+
+
+
+#upload-receipt{
+    margin-top:10px;
+    font-family: 'Playfair Display', 'Dancing Script', 'Great Vibes', 'Cinzel', 'Merriweather', serif;
+    padding: 0.5rem 1rem;
+    cursor: pointer; /* Default cursor for disabled state */
+    font-weight: bold;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: rgb(0, 0, 0);
+    background: linear-gradient(to right, #ffffff, #e3cc5b, #ffffff, #e3cc5b);
+    background-size: 200%;
+    border: 4px double rgba(21, 21, 20, 0.8); /* Double border effect */
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2), 0 6px 20px rgba(0, 0, 0, 0.19); /* Creates depth */
+    transition: background-position 0.3s ease-in-out, background-color 0.3s ease, cursor 0.3s ease;
+    animation: gradientMove 4s ease-in-out infinite alternate;
+    width: 100%;
+    max-width: 200px; /* Optional: limit button width */
+    font-size: 10px;
+
+}
+
+
+
+#upload-receipt:hover ,#reservationButton:hover{
+    background-position: 100%;
+    border: solid 2px rgba(255, 255, 255, 0.3);
+    box-shadow: 0px 4px 10px rgba(234, 243, 64, 0.2);
+    animation: gradientMove 0.5s ease-in-out infinite alternate;
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .form-container {
+        width: 90%;
+        height: 200%;
+        margin-left: 0;
+    }
+
+    .inline-layout {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .rooms-list-container {
+        height: auto;
+    }
+
+    .date-inputs-gst {
+        flex-direction: column;
+        gap: 10px;
+        align-items: center;
+
+    }
+}
+
+@media (max-width: 480px) {
+    .form-control {
+        font-size: 0.8rem;
+        padding: 8px;
+        align-items: center;
+    }
+
+
+
+    .form-container {
+        padding: 10px;
+        align-items: center;
+
+    }
+}
+
+
+
+
+
+
+/* Stay Duration Styling */
+.stay-duration {
+    font-weight: bold;
+    font-size: 1rem;
+    margin-top: 10px;
+    text-align: center;
+}
+
+/* Calendar Icon */
+.calendar-icon i {
+    font-size: 17px;
+    font-weight: bold;
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    color: rgb(227, 204, 91);
+    background: linear-gradient(to right, #ffffff, #e3cc5b, #ffffff, #e3cc5b);
+    background-size: 200%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-left: 10px;
+    animation: gradientMove 4s ease-in-out infinite alternate;
+    margin-bottom: 20px;
+}
+
+
+
+@keyframes gradientMove {
+    0% {
+        background-position: 0%;
+    }
+    100% {
+        background-position: 100%;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+/* Photo Upload Section */
+.photo-container {
+    width: 100%;
+    max-width: 250px;
+    height: 90px;
+    text-align: center;
+    margin-top: 10px;
+    overflow: hidden;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Uploaded image styling */
+img#uploaded-photo {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    border-radius: 5px;
+}
+
+
+
+
+
+/* Style for the burger icon */
+.menu-toggle {
+    display: none;
+    cursor: pointer;
+    font-size: 24px;
+    color: #333;
+    padding: 10px;
+}
+
+/* Display the burger icon on smaller screens */
+@media (max-width: 768px) {
+    .menu-toggle {
+        display: block;
+    }
+
+    .navbar .nav-list {
+        display: none;
+    }
+
+    .dropdown-menu {
+        display: none;
+        position: absolute;
+        right: 10px;
+        top: 60px;
+        background-color: #fff;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        list-style: none;
+        padding: 10px;
+        z-index: 100;
+    }
+
+    .dropdown-menu.active {
+        display: block;
+    }
+
+    .dropdown-menu li {
+        margin: 10px 0;
+    }
+
+    .dropdown-menu li a {
+        text-decoration: none;
+        color: #333;
+        font-size: 16px;
+        display: block;
+    }
+
+    .dropdown-menu li a:hover {
+        color: #007BFF;
+    }
+}
+
+/* Optional: add animation for dropdown menu */
+.dropdown-menu {
+    transition: all 0.3s ease-in-out;
+}
+
+
+
+
+
+
+
+
+/* Responsive Design for Tablets and Mobile Devices */
+@media (max-width: 992px) {
+    .inline-layout {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .reservation-form-container,
+    .rooms-list-container {
+        flex: 0 0 100%;
+        max-width: 100%;
+        margin-bottom: 20px;
+    }
+
+    .form-container {
+        width: 90%;
+        max-width: 600px;
+        padding: 15px;
+    }
+}
+
+/* Mobile Devices (Max width: 768px) */
+@media (max-width: 768px) {
+    .form-control,
+    #upload-receipt,
+    #reservationButton,
+    #remove-photo {
+        font-size: 0.9rem;
+        padding: 10px;
+    }
+
+    .photo-container {
+        max-width: 200px;
+    }
+}
+
+/* Extra Small Devices (Max width: 480px) */
+@media (max-width: 480px) {
+    .headline h2 {
+        font-size: 18px;
+    }
+
+    .form-control,
+    #upload-receipt,
+    #reservationButton,
+    #remove-photo {
+        font-size: 0.8rem;
+        padding: 8px;
+    }
+
+    .form-container {
+        width: 100%;
+        padding: 10px;
+    }
+}
+
+
+.loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+    display: none; /* Hidden by default */
+    z-index: 1000; /* Ensure it is above all content */
+}
+
+.spinner {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border: 8px solid rgba(0, 0, 0, 0.1);
+    border-top: 8px solid #007bff;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    animation: spin 1s linear infinite;
+}
+
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+.bank {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 10px auto;
+    padding: 5px;
+    border: 1px solid #dddddd35; /* Subtle border */
+    border-radius: 5px; /* Rounded corners */
+    max-width: 300px; /* Limit the width */
+    text-align: center; /* Center-align text */
+    font-family: Arial, sans-serif; /* Clean font */
+}
+
+.bank label {
+    font-weight: bold;
+    font-size: 13px;
+    margin-bottom: 5px;
+}
+
+.bank span {
+    font-size: 20px;
+    font-weight: bold;
+    color: #e4e43f;
+}
+
+.bank small {
+    font-size: 12px;
+    color: gray;
+    display: block; /* Ensure it appears on a new line */
+}
+
+

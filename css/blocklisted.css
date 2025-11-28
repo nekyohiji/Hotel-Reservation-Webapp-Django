@@ -1,0 +1,60 @@
+/* Container and layout styling */
+.container {
+    font-family: 'Poppins', sans-serif;
+    max-width: 800px;
+    width: 100%;
+    padding: 20px;
+    margin: 50px auto;
+    background-color: #f9f9f9;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.header {
+    font-family: 'Poppins', sans-serif;
+    font-size: 24px;
+    margin-bottom: 20px;
+    text-align: center;
+    color: #333;
+}
+
+/* Search Bar Styling */
+.search {
+    font-family: 'Poppins', sans-serif;
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 16px;
+}
+
+/* Table Styling */
+.table {
+    font-family: 'Poppins', sans-serif;
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.table th, .table td {
+    font-family: 'Poppins', sans-serif;
+    padding: 12px;
+    border: 1px solid #ddd;
+    text-align: left;
+}
+
+.table th {
+    font-family: 'Poppins', sans-serif;
+    background-color: #f2f2f2;
+    font-weight: bold;
+    color: #555;
+}
+
+.table tbody tr:nth-child(even) {
+    font-family: 'Poppins', sans-serif;
+    background-color: #fafafa;
+}
+
+.table tbody tr:hover {
+    font-family: 'Poppins', sans-serif;
+    background-color: #e9e9e9;
+}
